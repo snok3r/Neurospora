@@ -12,6 +12,8 @@ namespace Neurospora
 {
     public partial class Window : Form
     {
+        ODEs[] odes;
+
         public Window()
         {
             InitializeComponent();
