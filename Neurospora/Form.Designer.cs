@@ -1,6 +1,6 @@
 ﻿namespace Neurospora
 {
-    partial class Form1
+    partial class Form
     {
         /// <summary>
         /// Требуется переменная конструктора.
