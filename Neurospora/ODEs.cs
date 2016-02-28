@@ -14,8 +14,8 @@ namespace Neurospora
         public ODEs() : base()
         {
             M0 = 1;
-            Fc0 = 1;
-            Fn0 = 1;
+            Fc0 = 0.5;
+            Fn0 = 0.5;
         }
 
         // свойства
@@ -44,16 +44,15 @@ namespace Neurospora
         {
             ht = T / N;
 
+            // выделение памяти под массивы
+            M = new double[N];
+            Fc = new double[N];
+            Fn = new double[N];
             t = new double[N];
 
             // разбиение отрезка
             for (int j = 0; j < N; j++)
                 t[j] = j * ht;
-
-            // выделение памяти под массивы
-            M = new double[N];
-            Fc = new double[N];
-            Fn = new double[N];
         }
 
         public override void initials()

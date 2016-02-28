@@ -57,7 +57,6 @@ namespace Neurospora
 
         private void btnPlotBeh()
         {
-            // Plot button behaviour
             if (!labelError.Visible)
             {
                 btnSolve.Enabled = false;
@@ -68,7 +67,6 @@ namespace Neurospora
         private void btnSolve_Click(object sender, EventArgs e)
         {
             progressBar.Value = 0;
-            progressBar.Maximum = 3;
 
             for (int i = 0; i < NUM_OF_EQ; i++)
                 odes[i].load();
