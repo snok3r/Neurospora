@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.ComponentModel;
 
 namespace Neurospora
 {
@@ -20,16 +17,21 @@ namespace Neurospora
         }
 
         // свойства
+        [Description("Начальное значение M(0)")]
         public double M0
         {
             get;
             set;
         }
+
+        [Description("Начальное значение Fc(0)")]
         public double Fc0
         {
             get;
             set;
         }
+
+        [Description("Начальное значение Fn(0)")]
         public double Fn0
         {
             get;
