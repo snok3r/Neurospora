@@ -16,8 +16,8 @@ namespace Neurospora
         // конструктор
         protected Solvable()
         {
-            N = 1000;
-            T = 50;
+            N = 10000;
+            T = 72;
 
             n = 4;
             
@@ -56,7 +56,7 @@ namespace Neurospora
             set;
         }
 
-        [Description("Интервал [0,T]")]
+        [Description("Интервал [0,T] (h)")]
         public double T
         {
             get;
