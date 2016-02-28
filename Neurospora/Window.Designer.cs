@@ -30,13 +30,14 @@
         {
             this.SuspendLayout();
             // 
-            // Form1
+            // Window
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(284, 261);
-            this.Name = "Form1";
+            this.Name = "Window";
             this.Text = "Neurospora";
+            this.Load += new System.EventHandler(this.Window_Load);
             this.ResumeLayout(false);
 
         }

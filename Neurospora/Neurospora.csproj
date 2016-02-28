@@ -45,6 +45,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ODEs.cs" />
+    <Compile Include="Solvable.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Window.cs">
       <SubType>Form</SubType>
     </Compile>
