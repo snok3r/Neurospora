@@ -9,6 +9,8 @@ namespace Neurospora
         private double[] t; // массив для разбиения отрезка
         private double ht; // шаг по t
 
+        private const double VALUE_THRESHOLD = 1E4;
+
         public ODEs() : base()
         {
             M0 = 1;
@@ -73,18 +75,18 @@ namespace Neurospora
                 // Euler's 2nd order                                               //
                 double fntemp1 = fn(Fc[j], Fn[j]);
                 double fntemp = Fn[j] + ht * fntemp1;
-                if (Double.IsNaN(fntemp))
+                if (fntemp > VALUE_THRESHOLD)
                     return -1;
 
                 double mtemp1 = fm(M[j], Fn[j], ki_n);
                 double mtemp = M[j] + ht * mtemp1;
-                if (Double.IsNaN(mtemp))
+                if (mtemp > VALUE_THRESHOLD)
                     return -1;
                 M[j + 1] = M[j] + ht * 0.5 * (mtemp1 + fm(mtemp, fntemp, ki_n));
 
                 double fctemp1 = fc(M[j + 1], Fc[j], Fn[j]);
                 double fctemp = Fc[j] + ht * fctemp1;
-                if (Double.IsNaN(fctemp))
+                if (fctemp > VALUE_THRESHOLD)
                     return -1;
                 Fc[j + 1] = Fc[j] + ht * 0.5 * (fctemp1 + fc(mtemp, fctemp, fntemp));
 
@@ -97,19 +99,19 @@ namespace Neurospora
                 //// Euler's 1st order //
                 //double mtemp1 = fm(M[j], Fn[j], ki_n);
                 //double mtemp = M[j] + ht * mtemp1;
-                //if (Double.IsNaN(mtemp))
+                //if (mtemp > VALUE_THRESHOLD)
                 //    return -1;
                 //M[j + 1] = mtemp;
 
                 //double fctemp1 = fc(M[j + 1], Fc[j], Fn[j]);
                 //double fctemp = Fc[j] + ht * fctemp1;
-                //if (Double.IsNaN(fctemp))
+                //if (fctemp > VALUE_THRESHOLD)
                 //    return -1;
                 //Fc[j + 1] = fctemp;
 
                 //double fntemp1 = fn(Fc[j + 1], Fn[j]);
                 //double fntemp = Fn[j] + ht * fntemp1;
-                //if (Double.IsNaN(fntemp))
+                //if (fntemp > VALUE_THRESHOLD)
                 //    return -1;
                 //Fn[j + 1] = fntemp;
                 ////                    //
@@ -124,12 +126,10 @@ namespace Neurospora
         {
             return Vs * ki_n / (ki_n + Math.Pow(fn, n)) - Vm * m / (Km + m);
         }
-
         private double fc(double m, double fc, double fn)
         {
             return ks * m - Vd * fc / (Kd + fc) - k1 * fc + k2 * fn;
         }
-
         private double fn(double fc, double fn)
         {
             return k1 * fc - k2 * fn;

@@ -23,10 +23,46 @@ namespace Neurospora
         {
             odes = new ODEs[NUM_OF_EQ];
 
-            for (int i = 0; i < odes.Length; i++)
+            for (int i = 0; i < NUM_OF_EQ; i++)
                 odes[i] = new ODEs();
 
             propertyGrid.SelectedObject = odes[0];
+        }
+
+        private void Window_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            chart.Series.Clear();
+
+            for (int i = 0; i < NUM_OF_EQ; i++)
+                odes[i] = null;
+
+            odes = null;
+        }
+
+        private void propertyGrid_SelectedGridItemChanged(object sender, SelectedGridItemChangedEventArgs e)
+        {
+            btnSolveBeh();
+        }
+
+        private void btnSolveBeh()
+        {
+            if (btnPlot.Enabled)
+            {
+                btnPlot.Enabled = false;
+                btnSolve.Enabled = true;
+            }
+
+            labelError.Visible = false;
+        }
+
+        private void btnPlotBeh()
+        {
+            // Plot button behaviour
+            if (!labelError.Visible)
+            {
+                btnSolve.Enabled = false;
+                btnPlot.Enabled = true;
+            }
         }
 
         private void btnSolve_Click(object sender, EventArgs e)
@@ -34,21 +70,23 @@ namespace Neurospora
             progressBar.Value = 0;
             progressBar.Maximum = 3;
 
-            for (int i = 0; i < odes.Length; i++)
+            for (int i = 0; i < NUM_OF_EQ; i++)
                 odes[i].load();
             progressBar.Value++;
 
-            for (int i = 0; i < odes.Length; i++)
+            for (int i = 0; i < NUM_OF_EQ; i++)
                 odes[i].initials();
             progressBar.Value++;
 
-            for (int i = 0; i < odes.Length; i++)
+            for (int i = 0; i < NUM_OF_EQ; i++)
             {
                 int extCode = odes[i].solve();
                 if (extCode != 0)
                     labelError.Visible = true;
             }
             progressBar.Value++;
+
+            btnPlotBeh();
         }
 
         private void btnPlot_Click(object sender, EventArgs e)
@@ -56,7 +94,7 @@ namespace Neurospora
             clearPlot();
             setPlot();
 
-            for (int i = 0; i < odes.Length; i++)
+            for (int i = 0; i < NUM_OF_EQ; i++)
                 for (int j = 0; j < odes[i].N; j++)
                     plot(j, odes[i]);
         }
@@ -83,11 +121,7 @@ namespace Neurospora
             chart.ChartAreas[0].AxisX.Minimum = 0;
             chart.ChartAreas[0].AxisX.Maximum = odes[0].T + 1;
 
-            //chart.ChartAreas[0].AxisY.Maximum = Convert.ToDouble(txtBoxMaxUVT.Text);
-            //chart.ChartAreas[0].AxisY.Minimum = Convert.ToDouble(txtBoxMinUVT.Text);
-
             chart.ChartAreas[0].AxisX.Interval = Convert.ToInt32((chart.ChartAreas[0].AxisX.Maximum + chart.ChartAreas[0].AxisX.Minimum) / 6.0);
-            //chart.ChartAreas[0].AxisY.Interval = Convert.ToInt32((chart.ChartAreas[0].AxisY.Maximum + chart.ChartAreas[0].AxisY.Minimum) / 4.0);
         }
     }
 }
