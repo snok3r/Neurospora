@@ -123,5 +123,11 @@ namespace Neurospora
 
             chart.ChartAreas[0].AxisX.Interval = Convert.ToInt32((chart.ChartAreas[0].AxisX.Maximum + chart.ChartAreas[0].AxisX.Minimum) / 6.0);
         }
+
+        private void btnAbout_Click(object sender, EventArgs e)
+        {
+            About w = new About();
+            w.Show();
+        }
     }
 }

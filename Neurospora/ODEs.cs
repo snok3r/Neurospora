@@ -73,24 +73,24 @@ namespace Neurospora
             {
                 /////////////////////////////////////////////////////////////////////
                 // Euler's 2nd order                                               //
-                double fntemp1 = fn(Fc[j], Fn[j]);
-                double fntemp = Fn[j] + ht * fntemp1;
+                double fn_j = fn(Fc[j], Fn[j]);
+                double fntemp = Fn[j] + ht * fn_j;
                 if (fntemp > VALUE_THRESHOLD)
                     return -1;
 
-                double mtemp1 = fm(M[j], Fn[j], ki_n);
-                double mtemp = M[j] + ht * mtemp1;
+                double m_j = fm(M[j], Fn[j], ki_n);
+                double mtemp = M[j] + ht * m_j;
                 if (mtemp > VALUE_THRESHOLD)
                     return -1;
-                M[j + 1] = M[j] + ht * 0.5 * (mtemp1 + fm(mtemp, fntemp, ki_n));
 
-                double fctemp1 = fc(M[j + 1], Fc[j], Fn[j]);
-                double fctemp = Fc[j] + ht * fctemp1;
+                double fc_j = fc(M[j], Fc[j], Fn[j]);
+                double fctemp = Fc[j] + ht * fc_j;
                 if (fctemp > VALUE_THRESHOLD)
                     return -1;
-                Fc[j + 1] = Fc[j] + ht * 0.5 * (fctemp1 + fc(mtemp, fctemp, fntemp));
 
-                Fn[j + 1] = Fn[j] + ht * 0.5 * (fntemp1 + fn(fctemp, fntemp));
+                M[j + 1] = M[j] + ht * 0.5 * (m_j + fm(mtemp, fntemp, ki_n));
+                Fc[j + 1] = Fc[j] + ht * 0.5 * (fc_j + fc(mtemp, fctemp, fntemp));
+                Fn[j + 1] = Fn[j] + ht * 0.5 * (fn_j + fn(fctemp, fntemp));
                 //                                                                  //
                 /////////////////////////////////////////////////////////////////////
 

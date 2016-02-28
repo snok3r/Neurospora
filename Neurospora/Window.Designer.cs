@@ -40,6 +40,7 @@
             this.btnPlot = new System.Windows.Forms.Button();
             this.progressBar = new System.Windows.Forms.ProgressBar();
             this.labelError = new System.Windows.Forms.Label();
+            this.btnAbout = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.chart)).BeginInit();
             this.SuspendLayout();
             // 
@@ -129,12 +130,23 @@
             this.labelError.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.labelError.Visible = false;
             // 
+            // btnAbout
+            // 
+            this.btnAbout.Location = new System.Drawing.Point(12, 370);
+            this.btnAbout.Name = "btnAbout";
+            this.btnAbout.Size = new System.Drawing.Size(163, 23);
+            this.btnAbout.TabIndex = 5;
+            this.btnAbout.Text = "О системе уравнений";
+            this.btnAbout.UseVisualStyleBackColor = true;
+            this.btnAbout.Click += new System.EventHandler(this.btnAbout_Click);
+            // 
             // Window
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.ClientSize = new System.Drawing.Size(1084, 561);
+            this.Controls.Add(this.btnAbout);
             this.Controls.Add(this.labelError);
             this.Controls.Add(this.progressBar);
             this.Controls.Add(this.btnPlot);
@@ -162,6 +174,7 @@
         private System.Windows.Forms.Button btnPlot;
         private System.Windows.Forms.ProgressBar progressBar;
         private System.Windows.Forms.Label labelError;
+        private System.Windows.Forms.Button btnAbout;
     }
 }
 
