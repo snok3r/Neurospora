@@ -9,8 +9,8 @@ namespace Neurospora
 {
     abstract class Solvable
     {
-        protected abstract void load();
-        protected abstract void initials();
+        public abstract void load();
+        public abstract void initials();
         public abstract int solve();
 
         // конструктор
@@ -30,7 +30,7 @@ namespace Neurospora
             k2 = 0.6;
 
             Km = 0.5;
-            K1 = 1;
+            Ki = 1;
             Kd = 0.13;
         }
 
@@ -48,6 +48,7 @@ namespace Neurospora
                     varN = value;
             }
         }
+
         [Description("Степень")]
         public int n
         {
@@ -84,7 +85,7 @@ namespace Neurospora
         }
 
         [Description("(nM)")]
-        public double K1
+        public double Ki
         {
             get;
             set;

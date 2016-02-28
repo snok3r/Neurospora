@@ -50,7 +50,7 @@ namespace Neurospora
             Fn = new double[N];
         }
 
-        protected override void initials()
+        public override void initials()
         {   // начальные условия
             M[0] = M0;
             Fc[0] = Fc0;
