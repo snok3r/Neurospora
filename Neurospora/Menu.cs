@@ -19,8 +19,7 @@ namespace Neurospora
         {
             InitializeComponent();
 
-            w = new Plot();
-            w.Show();
+            openPlot();
         }
 
         private void Window_Load(object sender, EventArgs e)
@@ -101,10 +100,16 @@ namespace Neurospora
         {
             if (!w.Created)
             {
-                w = new Plot();
-                w.Show();
+                openPlot();
             }
             w.btnPlot_Click(odes, NUM_OF_EQ);
+        }
+
+        private void openPlot()
+        {
+            w = new Plot();
+            w.Show();
+            w.SetDesktopLocation(this.Location.X + this.Size.Width, this.Location.Y);
         }
 
         private void btnAbout_Click(object sender, EventArgs e)
