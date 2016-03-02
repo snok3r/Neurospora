@@ -12,7 +12,7 @@ namespace Neurospora
     public partial class Window : Form
     {
         ODEs[] odes;
-        const int NUM_OF_EQ = 1;
+        private const int NUM_OF_EQ = 1;
 
         public Window()
         {
@@ -41,11 +41,15 @@ namespace Neurospora
 
         private void propertyGrid_SelectedGridItemChanged(object sender, SelectedGridItemChangedEventArgs e)
         {
-            btnSolveBeh();
+            // при изменении параметров уравнений,
+            // запрещаем рисовать решение
+            disablePlotBtn();
         }
 
-        private void btnSolveBeh()
+        private void disablePlotBtn()
         {
+            // выключает кнопку "Нарисовать" и 
+            // включает кнопку "Решить"
             if (btnPlot.Enabled)
             {
                 btnPlot.Enabled = false;
@@ -55,8 +59,10 @@ namespace Neurospora
             labelError.Visible = false;
         }
 
-        private void btnPlotBeh()
+        private void enablePlotBtn()
         {
+            // если система решена успешно,
+            // то включаем кнопку "Нарисовать"
             if (!labelError.Visible)
             {
                 btnSolve.Enabled = false;
@@ -84,7 +90,7 @@ namespace Neurospora
             }
             progressBar.Value++;
 
-            btnPlotBeh();
+            enablePlotBtn();
         }
 
         private void btnPlot_Click(object sender, EventArgs e)
@@ -110,12 +116,14 @@ namespace Neurospora
 
         private void clearPlot()
         {
+            // удаляет все точки с графика
             for (int i = 0; i < chart.Series.Count(); i++)
                 chart.Series[i].Points.Clear();
         }
 
         private void setPlot()
         {
+            // настраивает оси графика
             chart.ChartAreas[0].AxisX.Minimum = 0;
             chart.ChartAreas[0].AxisX.Maximum = odes[0].T + 1;
 
