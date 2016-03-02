@@ -3,7 +3,7 @@ using System.ComponentModel;
 
 namespace Neurospora
 {
-    class ODEs : Solvable
+    public class ODEs : Solvable
     {
         private double[] M, Fc, Fn; // массивы для решений уравнений
         private double[] t; // массив для разбиения отрезка
@@ -20,6 +20,7 @@ namespace Neurospora
 
         // свойства
         [Description("Начальное значение M(0)")]
+        [Category("Начальные условия")]
         public double M0
         {
             get;
@@ -27,6 +28,7 @@ namespace Neurospora
         }
 
         [Description("Начальное значение Fc(0)")]
+        [Category("Начальные условия")]
         public double Fc0
         {
             get;
@@ -34,6 +36,7 @@ namespace Neurospora
         }
 
         [Description("Начальное значение Fn(0)")]
+        [Category("Начальные условия")]
         public double Fn0
         {
             get;

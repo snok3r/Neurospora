@@ -1,6 +1,6 @@
 ﻿namespace Neurospora
 {
-    partial class Window
+    partial class Menu
     {
         /// <summary>
         /// Требуется переменная конструктора.
@@ -28,80 +28,25 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Series series3 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Series series4 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Title title1 = new System.Windows.Forms.DataVisualization.Charting.Title();
-            this.chart = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.propertyGrid = new System.Windows.Forms.PropertyGrid();
             this.btnSolve = new System.Windows.Forms.Button();
             this.btnPlot = new System.Windows.Forms.Button();
             this.progressBar = new System.Windows.Forms.ProgressBar();
             this.labelError = new System.Windows.Forms.Label();
             this.btnAbout = new System.Windows.Forms.Button();
-            ((System.ComponentModel.ISupportInitialize)(this.chart)).BeginInit();
             this.SuspendLayout();
-            // 
-            // chart
-            // 
-            chartArea1.Name = "ChartArea1";
-            this.chart.ChartAreas.Add(chartArea1);
-            legend1.Name = "Legend1";
-            this.chart.Legends.Add(legend1);
-            this.chart.Location = new System.Drawing.Point(181, 8);
-            this.chart.Name = "chart";
-            series1.BorderWidth = 2;
-            series1.ChartArea = "ChartArea1";
-            series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series1.Legend = "Legend1";
-            series1.Name = "M";
-            series2.BorderWidth = 2;
-            series2.ChartArea = "ChartArea1";
-            series2.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series2.Legend = "Legend1";
-            series2.Name = "Ft";
-            series3.BorderWidth = 2;
-            series3.ChartArea = "ChartArea1";
-            series3.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series3.Legend = "Legend1";
-            series3.Name = "Fn";
-            series4.BorderWidth = 3;
-            series4.ChartArea = "ChartArea1";
-            series4.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.FastLine;
-            series4.Legend = "Legend1";
-            series4.Name = "Vs";
-            this.chart.Series.Add(series1);
-            this.chart.Series.Add(series2);
-            this.chart.Series.Add(series3);
-            this.chart.Series.Add(series4);
-            this.chart.Size = new System.Drawing.Size(900, 541);
-            this.chart.TabIndex = 0;
-            this.chart.Text = "chart";
-            title1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold);
-            title1.Name = "Title1";
-            title1.Position.Auto = false;
-            title1.Position.Height = 3.022451F;
-            title1.Position.Width = 94F;
-            title1.Position.X = 3F;
-            title1.Position.Y = 95F;
-            title1.Text = "Time (hours)";
-            this.chart.Titles.Add(title1);
             // 
             // propertyGrid
             // 
             this.propertyGrid.Location = new System.Drawing.Point(8, 8);
             this.propertyGrid.Name = "propertyGrid";
-            this.propertyGrid.PropertySort = System.Windows.Forms.PropertySort.Alphabetical;
-            this.propertyGrid.Size = new System.Drawing.Size(167, 340);
+            this.propertyGrid.Size = new System.Drawing.Size(167, 385);
             this.propertyGrid.TabIndex = 1;
             this.propertyGrid.SelectedGridItemChanged += new System.Windows.Forms.SelectedGridItemChangedEventHandler(this.propertyGrid_SelectedGridItemChanged);
             // 
             // btnSolve
             // 
-            this.btnSolve.Location = new System.Drawing.Point(12, 399);
+            this.btnSolve.Location = new System.Drawing.Point(12, 438);
             this.btnSolve.Name = "btnSolve";
             this.btnSolve.Size = new System.Drawing.Size(163, 38);
             this.btnSolve.TabIndex = 2;
@@ -111,7 +56,7 @@
             // 
             // btnPlot
             // 
-            this.btnPlot.Location = new System.Drawing.Point(12, 443);
+            this.btnPlot.Location = new System.Drawing.Point(12, 482);
             this.btnPlot.Name = "btnPlot";
             this.btnPlot.Size = new System.Drawing.Size(163, 38);
             this.btnPlot.TabIndex = 3;
@@ -133,7 +78,7 @@
             this.labelError.AutoSize = true;
             this.labelError.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.labelError.ForeColor = System.Drawing.Color.Maroon;
-            this.labelError.Location = new System.Drawing.Point(9, 505);
+            this.labelError.Location = new System.Drawing.Point(9, 529);
             this.labelError.Name = "labelError";
             this.labelError.Size = new System.Drawing.Size(169, 18);
             this.labelError.TabIndex = 4;
@@ -143,7 +88,7 @@
             // 
             // btnAbout
             // 
-            this.btnAbout.Location = new System.Drawing.Point(12, 370);
+            this.btnAbout.Location = new System.Drawing.Point(12, 409);
             this.btnAbout.Name = "btnAbout";
             this.btnAbout.Size = new System.Drawing.Size(163, 23);
             this.btnAbout.TabIndex = 5;
@@ -151,28 +96,26 @@
             this.btnAbout.UseVisualStyleBackColor = true;
             this.btnAbout.Click += new System.EventHandler(this.btnAbout_Click);
             // 
-            // Window
+            // Menu
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.ClientSize = new System.Drawing.Size(1084, 561);
+            this.ClientSize = new System.Drawing.Size(184, 561);
             this.Controls.Add(this.btnAbout);
             this.Controls.Add(this.labelError);
             this.Controls.Add(this.progressBar);
             this.Controls.Add(this.btnPlot);
             this.Controls.Add(this.btnSolve);
             this.Controls.Add(this.propertyGrid);
-            this.Controls.Add(this.chart);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.HelpButton = true;
             this.MaximizeBox = false;
-            this.Name = "Window";
+            this.Name = "Menu";
             this.ShowIcon = false;
-            this.Text = "Neurospora";
+            this.Text = "Menu";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Window_FormClosing);
             this.Load += new System.EventHandler(this.Window_Load);
-            ((System.ComponentModel.ISupportInitialize)(this.chart)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -180,7 +123,6 @@
 
         #endregion
 
-        private System.Windows.Forms.DataVisualization.Charting.Chart chart;
         private System.Windows.Forms.PropertyGrid propertyGrid;
         private System.Windows.Forms.Button btnSolve;
         private System.Windows.Forms.Button btnPlot;
