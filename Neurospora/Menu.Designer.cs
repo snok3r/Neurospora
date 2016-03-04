@@ -31,7 +31,6 @@
             this.propertyGrid = new System.Windows.Forms.PropertyGrid();
             this.btnSolve = new System.Windows.Forms.Button();
             this.btnPlot = new System.Windows.Forms.Button();
-            this.progressBar = new System.Windows.Forms.ProgressBar();
             this.labelError = new System.Windows.Forms.Label();
             this.btnAbout = new System.Windows.Forms.Button();
             this.SuspendLayout();
@@ -64,21 +63,12 @@
             this.btnPlot.UseVisualStyleBackColor = true;
             this.btnPlot.Click += new System.EventHandler(this.btnPlot_Click);
             // 
-            // progressBar
-            // 
-            this.progressBar.Location = new System.Drawing.Point(12, 526);
-            this.progressBar.Maximum = 3;
-            this.progressBar.Name = "progressBar";
-            this.progressBar.Size = new System.Drawing.Size(163, 23);
-            this.progressBar.Step = 1;
-            this.progressBar.TabIndex = 1;
-            // 
             // labelError
             // 
             this.labelError.AutoSize = true;
             this.labelError.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.labelError.ForeColor = System.Drawing.Color.Maroon;
-            this.labelError.Location = new System.Drawing.Point(9, 529);
+            this.labelError.Location = new System.Drawing.Point(12, 491);
             this.labelError.Name = "labelError";
             this.labelError.Size = new System.Drawing.Size(169, 18);
             this.labelError.TabIndex = 4;
@@ -101,10 +91,9 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.ClientSize = new System.Drawing.Size(184, 561);
+            this.ClientSize = new System.Drawing.Size(184, 531);
             this.Controls.Add(this.btnAbout);
             this.Controls.Add(this.labelError);
-            this.Controls.Add(this.progressBar);
             this.Controls.Add(this.btnPlot);
             this.Controls.Add(this.btnSolve);
             this.Controls.Add(this.propertyGrid);
@@ -128,7 +117,6 @@
         private System.Windows.Forms.PropertyGrid propertyGrid;
         private System.Windows.Forms.Button btnSolve;
         private System.Windows.Forms.Button btnPlot;
-        private System.Windows.Forms.ProgressBar progressBar;
         private System.Windows.Forms.Label labelError;
         private System.Windows.Forms.Button btnAbout;
     }

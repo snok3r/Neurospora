@@ -75,15 +75,11 @@ namespace Neurospora
 
         private void btnSolve_Click(object sender, EventArgs e)
         {
-            progressBar.Value = 0;
-
             for (int i = 0; i < NUM_OF_EQ; i++)
                 odes[i].load();
-            progressBar.Value++;
 
             for (int i = 0; i < NUM_OF_EQ; i++)
                 odes[i].initials();
-            progressBar.Value++;
 
             for (int i = 0; i < NUM_OF_EQ; i++)
             {
@@ -91,7 +87,6 @@ namespace Neurospora
                 if (extCode != 0)
                     labelError.Visible = true;
             }
-            progressBar.Value++;
 
             enablePlotBtn();
         }
@@ -99,9 +94,7 @@ namespace Neurospora
         private void btnPlot_Click(object sender, EventArgs e)
         {
             if (!w.Created)
-            {
                 openPlot();
-            }
             w.btnPlot_Click(odes, NUM_OF_EQ);
         }
 
