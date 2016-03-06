@@ -35,6 +35,7 @@
             System.Windows.Forms.DataVisualization.Charting.Series series3 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.Windows.Forms.DataVisualization.Charting.Series series4 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.Windows.Forms.DataVisualization.Charting.Title title1 = new System.Windows.Forms.DataVisualization.Charting.Title();
+            System.Windows.Forms.DataVisualization.Charting.Title title2 = new System.Windows.Forms.DataVisualization.Charting.Title();
             this.chart = new System.Windows.Forms.DataVisualization.Charting.Chart();
             ((System.ComponentModel.ISupportInitialize)(this.chart)).BeginInit();
             this.SuspendLayout();
@@ -44,6 +45,7 @@
             this.chart.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            chartArea1.AxisX.Title = "Time (hours)";
             chartArea1.Name = "ChartArea1";
             this.chart.ChartAreas.Add(chartArea1);
             legend1.Name = "Legend1";
@@ -77,15 +79,10 @@
             this.chart.Size = new System.Drawing.Size(960, 507);
             this.chart.TabIndex = 1;
             this.chart.Text = "chart";
-            title1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold);
             title1.Name = "Title1";
-            title1.Position.Auto = false;
-            title1.Position.Height = 3.022451F;
-            title1.Position.Width = 94F;
-            title1.Position.X = 3F;
-            title1.Position.Y = 95F;
-            title1.Text = "Time (hours)";
+            title2.Name = "Title2";
             this.chart.Titles.Add(title1);
+            this.chart.Titles.Add(title2);
             // 
             // Plot
             // 

@@ -1,17 +1,11 @@
 ﻿using System;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Neurospora
 {
     public partial class Menu : Form
     {
-        Plot w;
+        Plot plot;
         ODEs[] odes;
         private const int NUM_OF_EQ = 1;
 
@@ -22,7 +16,7 @@ namespace Neurospora
             openPlot();
         }
 
-        private void Window_Load(object sender, EventArgs e)
+        private void Menu_Load(object sender, EventArgs e)
         {
             odes = new ODEs[NUM_OF_EQ];
 
@@ -32,48 +26,38 @@ namespace Neurospora
             propertyGrid.SelectedObject = odes[0];
         }
 
-        private void Window_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            for (int i = 0; i < NUM_OF_EQ; i++)
-                odes[i] = null;
-
-            odes = null;
-
-            w = null;
-        }
-
         private void propertyGrid_SelectedGridItemChanged(object sender, SelectedGridItemChangedEventArgs e)
         {
             // при изменении параметров уравнений,
             // запрещаем рисовать решение
-            disablePlotBtn();
+            disablePlotButton();
         }
 
-        private void disablePlotBtn()
+        private void disablePlotButton()
         {
             // выключает кнопку "Нарисовать" и 
             // включает кнопку "Решить"
-            if (btnPlot.Enabled)
+            if (buttonPlot.Enabled)
             {
-                btnPlot.Enabled = false;
-                btnSolve.Enabled = true;
+                buttonPlot.Enabled = false;
+                buttonSolve.Enabled = true;
             }
 
             labelError.Visible = false;
         }
 
-        private void enablePlotBtn()
+        private void enablePlotButton()
         {
             // если система решена успешно,
             // то включаем кнопку "Нарисовать"
             if (!labelError.Visible)
             {
-                btnSolve.Enabled = false;
-                btnPlot.Enabled = true;
+                buttonSolve.Enabled = false;
+                buttonPlot.Enabled = true;
             }
         }
 
-        private void btnSolve_Click(object sender, EventArgs e)
+        private void buttonSolve_Click(object sender, EventArgs e)
         {
             for (int i = 0; i < NUM_OF_EQ; i++)
                 odes[i].load();
@@ -83,32 +67,32 @@ namespace Neurospora
 
             for (int i = 0; i < NUM_OF_EQ; i++)
             {
-                int extCode = odes[i].solve();
-                if (extCode != 0)
+                if (odes[i].solve() != 0)
                     labelError.Visible = true;
             }
 
-            enablePlotBtn();
+            enablePlotButton();
         }
 
-        private void btnPlot_Click(object sender, EventArgs e)
+        private void buttonPlot_Click(object sender, EventArgs e)
         {
-            if (!w.Created)
+            if (!plot.Created)
                 openPlot();
-            w.btnPlot_Click(odes, NUM_OF_EQ);
+            plot.buttonPlot_Click(odes, NUM_OF_EQ);
         }
 
         private void openPlot()
         {
-            w = new Plot();
-            w.Show();
-            w.SetDesktopLocation(this.Location.X + this.Size.Width, this.Location.Y);
+            plot = new Plot();
+            plot.Show();
+            plot.SetDesktopLocation(this.Location.X + this.Size.Width, this.Location.Y);
         }
 
-        private void btnAbout_Click(object sender, EventArgs e)
+        private void buttonAbout_Click(object sender, EventArgs e)
         {
-            About w = new About();
-            w.Show();
+            About about = new About();
+            about.Show();
+            about.SetDesktopLocation(this.Location.X + this.Size.Width, this.Location.Y);
         }
     }
 }

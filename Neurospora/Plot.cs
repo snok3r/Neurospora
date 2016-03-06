@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Neurospora
@@ -17,25 +12,27 @@ namespace Neurospora
             InitializeComponent();
         }
 
-        public void btnPlot_Click(ODEs[] obj, int NUM_OF_EQ)
+        public void buttonPlot_Click(ODEs[] odes, int NUM_OF_EQ)
         {
             clearPlot();
-            setPlot(obj[0].T);
+            setPlot(odes[0].T);
 
             for (int i = 0; i < NUM_OF_EQ; i++)
-                for (int j = 0; j < obj[i].N; j++)
-                    plot(j, obj[i]);
+                for (int j = 0; j < odes[i].N; j++)
+                    plot(odes[i], j);
+
+            makeTitle(odes[0]);
         }
 
-        private void plot(int j, ODEs obj)
+        private void plot(ODEs ode, int j)
         {
-            double t = obj.getT(j);
-            double fn = obj.getFn(j);
+            double t = ode.getT(j);
+            double fn = ode.getFn(j);
 
-            chart.Series[0].Points.AddXY(t, obj.getM(j));
-            chart.Series[1].Points.AddXY(t, obj.getFc(j) + fn);
+            chart.Series[0].Points.AddXY(t, ode.getM(j));
+            chart.Series[1].Points.AddXY(t, ode.getFc(j) + fn);
             chart.Series[2].Points.AddXY(t, fn);
-            chart.Series[3].Points.AddXY(t, obj.Vs);
+            chart.Series[3].Points.AddXY(t, ode.Vs);
         }
 
         private void clearPlot()
@@ -52,6 +49,30 @@ namespace Neurospora
             chart.ChartAreas[0].AxisX.Maximum = T + 1;
 
             chart.ChartAreas[0].AxisX.Interval = Convert.ToInt32((chart.ChartAreas[0].AxisX.Maximum + chart.ChartAreas[0].AxisX.Minimum) / 6.0);
+        }
+
+        private void makeTitle(ODEs ode)
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append("Ki = " + ode.Ki + ";  ");
+            sb.Append("Km = " + ode.Km + ";  ");
+            sb.Append("Kd = " + ode.Kd + ";  ");
+            sb.Append("k1 = " + ode.k1 + ";  ");
+            sb.Append("k2 = " + ode.k2 + ";  ");
+            sb.Append("ks = " + ode.ks + ";  ");
+            sb.Append("Vs = " + ode.Vs + ";  ");
+            sb.Append("Vm = " + ode.Vm + ";  ");
+            sb.Append("Vd = " + ode.Vd + ";  ");
+            sb.Append("n = " + ode.n);
+            chart.Titles[0].Text = sb.ToString();
+            chart.Titles[0].Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
+
+            sb.Clear();
+            sb.Append("M(0) = " + ode.M0 + ";  ");
+            sb.Append("Fc(0) = " + ode.Fc0 + ";  ");
+            sb.Append("Fn(0) = " + ode.Fn0);
+            chart.Titles[1].Text = sb.ToString();
+            chart.Titles[1].Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
         }
     }
 }

@@ -29,10 +29,10 @@
         private void InitializeComponent()
         {
             this.propertyGrid = new System.Windows.Forms.PropertyGrid();
-            this.btnSolve = new System.Windows.Forms.Button();
-            this.btnPlot = new System.Windows.Forms.Button();
+            this.buttonSolve = new System.Windows.Forms.Button();
+            this.buttonPlot = new System.Windows.Forms.Button();
             this.labelError = new System.Windows.Forms.Label();
-            this.btnAbout = new System.Windows.Forms.Button();
+            this.buttonAbout = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // propertyGrid
@@ -43,25 +43,25 @@
             this.propertyGrid.TabIndex = 1;
             this.propertyGrid.SelectedGridItemChanged += new System.Windows.Forms.SelectedGridItemChangedEventHandler(this.propertyGrid_SelectedGridItemChanged);
             // 
-            // btnSolve
+            // buttonSolve
             // 
-            this.btnSolve.Location = new System.Drawing.Point(12, 438);
-            this.btnSolve.Name = "btnSolve";
-            this.btnSolve.Size = new System.Drawing.Size(163, 38);
-            this.btnSolve.TabIndex = 2;
-            this.btnSolve.Text = "Решить систему";
-            this.btnSolve.UseVisualStyleBackColor = true;
-            this.btnSolve.Click += new System.EventHandler(this.btnSolve_Click);
+            this.buttonSolve.Location = new System.Drawing.Point(12, 438);
+            this.buttonSolve.Name = "buttonSolve";
+            this.buttonSolve.Size = new System.Drawing.Size(163, 38);
+            this.buttonSolve.TabIndex = 2;
+            this.buttonSolve.Text = "Решить систему";
+            this.buttonSolve.UseVisualStyleBackColor = true;
+            this.buttonSolve.Click += new System.EventHandler(this.buttonSolve_Click);
             // 
-            // btnPlot
+            // buttonPlot
             // 
-            this.btnPlot.Location = new System.Drawing.Point(12, 482);
-            this.btnPlot.Name = "btnPlot";
-            this.btnPlot.Size = new System.Drawing.Size(163, 38);
-            this.btnPlot.TabIndex = 3;
-            this.btnPlot.Text = "Нарисовать график";
-            this.btnPlot.UseVisualStyleBackColor = true;
-            this.btnPlot.Click += new System.EventHandler(this.btnPlot_Click);
+            this.buttonPlot.Location = new System.Drawing.Point(12, 482);
+            this.buttonPlot.Name = "buttonPlot";
+            this.buttonPlot.Size = new System.Drawing.Size(163, 38);
+            this.buttonPlot.TabIndex = 3;
+            this.buttonPlot.Text = "Нарисовать график";
+            this.buttonPlot.UseVisualStyleBackColor = true;
+            this.buttonPlot.Click += new System.EventHandler(this.buttonPlot_Click);
             // 
             // labelError
             // 
@@ -76,15 +76,15 @@
             this.labelError.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.labelError.Visible = false;
             // 
-            // btnAbout
+            // buttonAbout
             // 
-            this.btnAbout.Location = new System.Drawing.Point(12, 409);
-            this.btnAbout.Name = "btnAbout";
-            this.btnAbout.Size = new System.Drawing.Size(163, 23);
-            this.btnAbout.TabIndex = 5;
-            this.btnAbout.Text = "О системе уравнений";
-            this.btnAbout.UseVisualStyleBackColor = true;
-            this.btnAbout.Click += new System.EventHandler(this.btnAbout_Click);
+            this.buttonAbout.Location = new System.Drawing.Point(12, 409);
+            this.buttonAbout.Name = "buttonAbout";
+            this.buttonAbout.Size = new System.Drawing.Size(163, 23);
+            this.buttonAbout.TabIndex = 5;
+            this.buttonAbout.Text = "О системе уравнений";
+            this.buttonAbout.UseVisualStyleBackColor = true;
+            this.buttonAbout.Click += new System.EventHandler(this.buttonAbout_Click);
             // 
             // Menu
             // 
@@ -92,10 +92,10 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.ClientSize = new System.Drawing.Size(184, 531);
-            this.Controls.Add(this.btnAbout);
+            this.Controls.Add(this.buttonAbout);
             this.Controls.Add(this.labelError);
-            this.Controls.Add(this.btnPlot);
-            this.Controls.Add(this.btnSolve);
+            this.Controls.Add(this.buttonPlot);
+            this.Controls.Add(this.buttonSolve);
             this.Controls.Add(this.propertyGrid);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.HelpButton = true;
@@ -105,8 +105,7 @@
             this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "Menu";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Window_FormClosing);
-            this.Load += new System.EventHandler(this.Window_Load);
+            this.Load += new System.EventHandler(this.Menu_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -115,10 +114,10 @@
         #endregion
 
         private System.Windows.Forms.PropertyGrid propertyGrid;
-        private System.Windows.Forms.Button btnSolve;
-        private System.Windows.Forms.Button btnPlot;
+        private System.Windows.Forms.Button buttonSolve;
+        private System.Windows.Forms.Button buttonPlot;
         private System.Windows.Forms.Label labelError;
-        private System.Windows.Forms.Button btnAbout;
+        private System.Windows.Forms.Button buttonAbout;
     }
 }
 
