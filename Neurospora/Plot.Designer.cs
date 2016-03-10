@@ -76,7 +76,7 @@
             this.chart.Series.Add(series2);
             this.chart.Series.Add(series3);
             this.chart.Series.Add(series4);
-            this.chart.Size = new System.Drawing.Size(960, 507);
+            this.chart.Size = new System.Drawing.Size(960, 537);
             this.chart.TabIndex = 1;
             this.chart.Text = "chart";
             title1.Name = "Title1";
@@ -88,7 +88,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(984, 531);
+            this.ClientSize = new System.Drawing.Size(984, 561);
             this.Controls.Add(this.chart);
             this.MinimumSize = new System.Drawing.Size(750, 450);
             this.Name = "Plot";

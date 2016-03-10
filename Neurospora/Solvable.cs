@@ -13,12 +13,11 @@ namespace Neurospora
         {
             N = 10000;
             T = 72;
-
+            
             n = 4;
             
             Vm = 0.505; 
             Vd = 1.4;
-            Vs = 1.6;
 
             ks = 0.5;
             k1 = 0.5;
@@ -45,14 +44,6 @@ namespace Neurospora
             }
         }
 
-        [Description("Степень")]
-        [Category("Параметры")]
-        public int n
-        {
-            get;
-            set;
-        }
-
         [Description("Интервал [0,T] (h)")]
         [Category("Для решения")]
         public double T
@@ -61,9 +52,9 @@ namespace Neurospora
             set;
         }
 
-        [Description("(nM/h)")]
+        [Description("Степень")]
         [Category("Параметры")]
-        public double Vs
+        public int n
         {
             get;
             set;

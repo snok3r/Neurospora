@@ -9,6 +9,13 @@ namespace Neurospora
         private double[] t; // массив для разбиения отрезка
         private double ht; // шаг по t
 
+        private double[] Vs; // массив для значений параметра
+        
+        // служебные переменные
+        private int switchPace;
+        private bool switchVs;
+        private bool isVsVariable;
+
         private const double VALUE_THRESHOLD = 1E4;
 
         public ODEs() : base()
@@ -16,6 +23,11 @@ namespace Neurospora
             M0 = 1;
             Fc0 = 0.5;
             Fn0 = 0.5;
+
+            Vs = new double[] { 1.6, 2.0 }; // первый для постоянного/ночного режима
+                                            // второй для дневного режима
+            switchVs = false;
+            isVsVariable = false;
         }
 
         // свойства
@@ -43,9 +55,57 @@ namespace Neurospora
             set;
         }
 
+        // меняем постоянность/переменность Vs
+        public void changeVsVar()
+        {
+            isVsVariable = !isVsVariable;
+        }
+
+        public void setVs(int j, double val)
+        {
+            Vs[j] = val;
+        }
+        public double getVs(int j)
+        {
+            // для сброса переключателя в дневной режим
+            if (j == -1)
+            {
+                switchVs = false;
+                return -1;
+            }
+
+            // каждые 12 часов переключаем режим
+            if (isVsVariable && j % switchPace == 0 && j != 0)
+                switchVs = !switchVs;
+
+            // если Vs постоянный
+            if (!isVsVariable)
+                return Vs[0];
+            // если Vs переменный и режим ночной
+            else if (switchVs && isVsVariable)
+                return Vs[0];
+            // если Vs переменный и режим дневной
+            else
+                return Vs[1];
+         }
+        public String getVsString()
+        {
+            if (isVsVariable)
+                return "Vs = " + Vs[0] + " / " + Vs[1] + ";  ";
+            else
+                return "Vs = " + Vs[0].ToString() + ";  ";
+        }
+        public double getVsMenu(int j)
+        {
+            return Vs[j];
+        }
+        
+
         public override void load()
         {
             ht = T / N;
+
+            switchPace = (int)(12 / ht + 1);
 
             // выделение памяти под массивы
             M = new double[N];
@@ -80,7 +140,7 @@ namespace Neurospora
                 if (fntemp > VALUE_THRESHOLD)
                     return -1;
 
-                double m_j = fm(M[j], Fn[j], ki_n);
+                double m_j = fm(M[j], Fn[j], ki_n, j);
                 double mtemp = M[j] + ht * m_j;
                 if (mtemp > VALUE_THRESHOLD)
                     return -1;
@@ -90,7 +150,10 @@ namespace Neurospora
                 if (fctemp > VALUE_THRESHOLD)
                     return -1;
 
-                M[j + 1] = M[j] + ht * 0.5 * (m_j + fm(mtemp, fntemp, ki_n));
+                if (isVsVariable && j % switchPace == 0 && j != 0)
+                    switchVs = !switchVs;
+
+                M[j + 1] = M[j] + ht * 0.5 * (m_j + fm(mtemp, fntemp, ki_n, j));
                 Fc[j + 1] = Fc[j] + ht * 0.5 * (fc_j + fc(mtemp, fctemp, fntemp));
                 Fn[j + 1] = Fn[j] + ht * 0.5 * (fn_j + fn(fctemp, fntemp));
                 //                                                                  //
@@ -99,7 +162,7 @@ namespace Neurospora
 
                 /////////////////////////
                 //// Euler's 1st order //
-                //double mtemp1 = fm(M[j], Fn[j], ki_n);
+                //double mtemp1 = fm(M[j], Fn[j], ki_n, j);
                 //double mtemp = M[j] + ht * mtemp1;
                 //if (mtemp > VALUE_THRESHOLD)
                 //    return -1;
@@ -124,9 +187,9 @@ namespace Neurospora
         }
 
         // вспомогательные функции
-        private double fm(double m, double fn, double ki_n)
+        private double fm(double m, double fn, double ki_n, int j)
         {
-            return Vs * ki_n / (ki_n + Math.Pow(fn, n)) - Vm * m / (Km + m);
+            return getVs(j) * ki_n / (ki_n + Math.Pow(fn, n)) - Vm * m / (Km + m);
         }
         private double fc(double m, double fc, double fn)
         {

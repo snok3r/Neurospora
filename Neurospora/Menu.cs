@@ -24,6 +24,9 @@ namespace Neurospora
                 odes[i] = new ODEs();
 
             propertyGrid.SelectedObject = odes[0];
+
+            textBoxVsDarkOrNon.Text = odes[0].getVsMenu(0).ToString();
+            textBoxVsLight.Text = odes[0].getVsMenu(1).ToString();
         }
 
         private void propertyGrid_SelectedGridItemChanged(object sender, SelectedGridItemChangedEventArgs e)
@@ -57,8 +60,61 @@ namespace Neurospora
             }
         }
 
+        private void checkBoxVs_CheckedChanged(object sender, EventArgs e)
+        {
+            disablePlotButton();
+
+            odes[0].changeVsVar();
+
+            labelVsLight.Visible = !labelVsLight.Visible;
+            textBoxVsLight.Visible = !textBoxVsLight.Visible;
+
+            if (checkBoxVs.Checked)
+                labelVsDarkOrNon.Text = "Vs dark";
+            else
+                labelVsDarkOrNon.Text = "Vs";
+        }
+
+        private void textBoxVsDarkOrNon_TextChanged(object sender, EventArgs e)
+        {
+            disablePlotButton();
+        }
+
+        private void textBoxVsDarkOrNon_Validated(object sender, EventArgs e)
+        {
+            try
+            {
+                odes[0].setVs(0, Double.Parse(textBoxVsDarkOrNon.Text));
+                textBoxVsDarkOrNon.Text = odes[0].getVsMenu(0).ToString();
+            }
+            catch (Exception)
+            {
+                textBoxVsDarkOrNon.Text = odes[0].getVsMenu(0).ToString();
+            }
+        }
+
+        private void textBoxVsLight_TextChanged(object sender, EventArgs e)
+        {
+            disablePlotButton();
+        }
+
+        private void textBoxVsLight_Validated(object sender, EventArgs e)
+        {
+            try
+            {
+                odes[0].setVs(1, Double.Parse(textBoxVsLight.Text));
+                textBoxVsLight.Text = odes[0].getVsMenu(1).ToString();
+            }
+            catch (Exception)
+            {
+                textBoxVsLight.Text = odes[0].getVsMenu(1).ToString();
+            }
+        }
+
         private void buttonSolve_Click(object sender, EventArgs e)
         {
+            odes[0].getVs(-1);
+
             for (int i = 0; i < NUM_OF_EQ; i++)
                 odes[i].load();
 

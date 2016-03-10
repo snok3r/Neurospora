@@ -33,19 +33,24 @@
             this.buttonPlot = new System.Windows.Forms.Button();
             this.labelError = new System.Windows.Forms.Label();
             this.buttonAbout = new System.Windows.Forms.Button();
+            this.checkBoxVs = new System.Windows.Forms.CheckBox();
+            this.labelVsDarkOrNon = new System.Windows.Forms.Label();
+            this.labelVsLight = new System.Windows.Forms.Label();
+            this.textBoxVsDarkOrNon = new System.Windows.Forms.TextBox();
+            this.textBoxVsLight = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // propertyGrid
             // 
             this.propertyGrid.Location = new System.Drawing.Point(8, 8);
             this.propertyGrid.Name = "propertyGrid";
-            this.propertyGrid.Size = new System.Drawing.Size(167, 385);
+            this.propertyGrid.Size = new System.Drawing.Size(167, 363);
             this.propertyGrid.TabIndex = 1;
             this.propertyGrid.SelectedGridItemChanged += new System.Windows.Forms.SelectedGridItemChangedEventHandler(this.propertyGrid_SelectedGridItemChanged);
             // 
             // buttonSolve
             // 
-            this.buttonSolve.Location = new System.Drawing.Point(12, 438);
+            this.buttonSolve.Location = new System.Drawing.Point(12, 467);
             this.buttonSolve.Name = "buttonSolve";
             this.buttonSolve.Size = new System.Drawing.Size(163, 38);
             this.buttonSolve.TabIndex = 2;
@@ -55,7 +60,7 @@
             // 
             // buttonPlot
             // 
-            this.buttonPlot.Location = new System.Drawing.Point(12, 482);
+            this.buttonPlot.Location = new System.Drawing.Point(12, 511);
             this.buttonPlot.Name = "buttonPlot";
             this.buttonPlot.Size = new System.Drawing.Size(163, 38);
             this.buttonPlot.TabIndex = 3;
@@ -68,7 +73,7 @@
             this.labelError.AutoSize = true;
             this.labelError.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.labelError.ForeColor = System.Drawing.Color.Maroon;
-            this.labelError.Location = new System.Drawing.Point(12, 491);
+            this.labelError.Location = new System.Drawing.Point(12, 520);
             this.labelError.Name = "labelError";
             this.labelError.Size = new System.Drawing.Size(169, 18);
             this.labelError.TabIndex = 4;
@@ -78,7 +83,7 @@
             // 
             // buttonAbout
             // 
-            this.buttonAbout.Location = new System.Drawing.Point(12, 409);
+            this.buttonAbout.Location = new System.Drawing.Point(12, 438);
             this.buttonAbout.Name = "buttonAbout";
             this.buttonAbout.Size = new System.Drawing.Size(163, 23);
             this.buttonAbout.TabIndex = 5;
@@ -86,12 +91,66 @@
             this.buttonAbout.UseVisualStyleBackColor = true;
             this.buttonAbout.Click += new System.EventHandler(this.buttonAbout_Click);
             // 
+            // checkBoxVs
+            // 
+            this.checkBoxVs.AutoSize = true;
+            this.checkBoxVs.Location = new System.Drawing.Point(12, 377);
+            this.checkBoxVs.Name = "checkBoxVs";
+            this.checkBoxVs.Size = new System.Drawing.Size(107, 17);
+            this.checkBoxVs.TabIndex = 6;
+            this.checkBoxVs.Text = "Переменный Vs";
+            this.checkBoxVs.UseVisualStyleBackColor = true;
+            this.checkBoxVs.CheckedChanged += new System.EventHandler(this.checkBoxVs_CheckedChanged);
+            // 
+            // labelVsDarkOrNon
+            // 
+            this.labelVsDarkOrNon.AutoSize = true;
+            this.labelVsDarkOrNon.Location = new System.Drawing.Point(12, 396);
+            this.labelVsDarkOrNon.Name = "labelVsDarkOrNon";
+            this.labelVsDarkOrNon.Size = new System.Drawing.Size(19, 13);
+            this.labelVsDarkOrNon.TabIndex = 7;
+            this.labelVsDarkOrNon.Text = "Vs";
+            // 
+            // labelVsLight
+            // 
+            this.labelVsLight.AutoSize = true;
+            this.labelVsLight.Location = new System.Drawing.Point(108, 396);
+            this.labelVsLight.Name = "labelVsLight";
+            this.labelVsLight.Size = new System.Drawing.Size(41, 13);
+            this.labelVsLight.TabIndex = 8;
+            this.labelVsLight.Text = "Vs light";
+            this.labelVsLight.Visible = false;
+            // 
+            // textBoxVsDarkOrNon
+            // 
+            this.textBoxVsDarkOrNon.Location = new System.Drawing.Point(12, 412);
+            this.textBoxVsDarkOrNon.Name = "textBoxVsDarkOrNon";
+            this.textBoxVsDarkOrNon.Size = new System.Drawing.Size(55, 20);
+            this.textBoxVsDarkOrNon.TabIndex = 9;
+            this.textBoxVsDarkOrNon.TextChanged += new System.EventHandler(this.textBoxVsDarkOrNon_TextChanged);
+            this.textBoxVsDarkOrNon.Validated += new System.EventHandler(this.textBoxVsDarkOrNon_Validated);
+            // 
+            // textBoxVsLight
+            // 
+            this.textBoxVsLight.Location = new System.Drawing.Point(111, 412);
+            this.textBoxVsLight.Name = "textBoxVsLight";
+            this.textBoxVsLight.Size = new System.Drawing.Size(61, 20);
+            this.textBoxVsLight.TabIndex = 10;
+            this.textBoxVsLight.Visible = false;
+            this.textBoxVsLight.TextChanged += new System.EventHandler(this.textBoxVsLight_TextChanged);
+            this.textBoxVsLight.Validated += new System.EventHandler(this.textBoxVsLight_Validated);
+            // 
             // Menu
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.ClientSize = new System.Drawing.Size(184, 531);
+            this.ClientSize = new System.Drawing.Size(184, 561);
+            this.Controls.Add(this.textBoxVsLight);
+            this.Controls.Add(this.textBoxVsDarkOrNon);
+            this.Controls.Add(this.labelVsLight);
+            this.Controls.Add(this.labelVsDarkOrNon);
+            this.Controls.Add(this.checkBoxVs);
             this.Controls.Add(this.buttonAbout);
             this.Controls.Add(this.labelError);
             this.Controls.Add(this.buttonPlot);
@@ -118,6 +177,11 @@
         private System.Windows.Forms.Button buttonPlot;
         private System.Windows.Forms.Label labelError;
         private System.Windows.Forms.Button buttonAbout;
+        private System.Windows.Forms.CheckBox checkBoxVs;
+        private System.Windows.Forms.Label labelVsDarkOrNon;
+        private System.Windows.Forms.Label labelVsLight;
+        private System.Windows.Forms.TextBox textBoxVsDarkOrNon;
+        private System.Windows.Forms.TextBox textBoxVsLight;
     }
 }
 

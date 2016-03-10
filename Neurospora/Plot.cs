@@ -18,8 +18,11 @@ namespace Neurospora
             setPlot(odes[0].T);
 
             for (int i = 0; i < NUM_OF_EQ; i++)
+            {
+                odes[i].getVs(-1);
                 for (int j = 0; j < odes[i].N; j++)
                     plot(odes[i], j);
+            }
 
             makeTitle(odes[0]);
         }
@@ -32,7 +35,7 @@ namespace Neurospora
             chart.Series[0].Points.AddXY(t, ode.getM(j));
             chart.Series[1].Points.AddXY(t, ode.getFc(j) + fn);
             chart.Series[2].Points.AddXY(t, fn);
-            chart.Series[3].Points.AddXY(t, ode.Vs);
+            chart.Series[3].Points.AddXY(t, ode.getVs(j));
         }
 
         private void clearPlot()
@@ -48,7 +51,10 @@ namespace Neurospora
             chart.ChartAreas[0].AxisX.Minimum = 0;
             chart.ChartAreas[0].AxisX.Maximum = T + 1;
 
-            chart.ChartAreas[0].AxisX.Interval = Convert.ToInt32((chart.ChartAreas[0].AxisX.Maximum + chart.ChartAreas[0].AxisX.Minimum) / 6.0);
+            if (T >= 12)
+                chart.ChartAreas[0].AxisX.Interval = 12;
+            else
+                chart.ChartAreas[0].AxisX.Interval = 3;
         }
 
         private void makeTitle(ODEs ode)
@@ -60,7 +66,7 @@ namespace Neurospora
             sb.Append("k1 = " + ode.k1 + ";  ");
             sb.Append("k2 = " + ode.k2 + ";  ");
             sb.Append("ks = " + ode.ks + ";  ");
-            sb.Append("Vs = " + ode.Vs + ";  ");
+            sb.Append(ode.getVsString());
             sb.Append("Vm = " + ode.Vm + ";  ");
             sb.Append("Vd = " + ode.Vd + ";  ");
             sb.Append("n = " + ode.n);
