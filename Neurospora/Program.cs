@@ -16,7 +16,7 @@ namespace Neurospora
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Window());
+            Application.Run(new Menu());
         }
     }
 }

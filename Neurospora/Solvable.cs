@@ -2,7 +2,7 @@
 
 namespace Neurospora
 {
-    abstract class Solvable
+    public abstract class Solvable
     {
         public abstract void load();
         public abstract void initials();
@@ -13,12 +13,11 @@ namespace Neurospora
         {
             N = 10000;
             T = 72;
-
+            
             n = 4;
             
             Vm = 0.505; 
             Vd = 1.4;
-            Vs = 1.6;
 
             ks = 0.5;
             k1 = 0.5;
@@ -34,6 +33,7 @@ namespace Neurospora
 
         // свойства
         [Description("Кол-во точек по t")]
+        [Category("Для решения")]
         public int N
         {
             get { return varN; }
@@ -44,28 +44,24 @@ namespace Neurospora
             }
         }
 
-        [Description("Степень")]
-        public int n
-        {
-            get;
-            set;
-        }
-
         [Description("Интервал [0,T] (h)")]
+        [Category("Для решения")]
         public double T
         {
             get;
             set;
         }
 
-        [Description("(nM/h)")]
-        public double Vs
+        [Description("Степень")]
+        [Category("Параметры")]
+        public int n
         {
             get;
             set;
         }
 
         [Description("(nM/h)")]
+        [Category("Параметры")]
         public double Vm
         {
             get;
@@ -73,6 +69,7 @@ namespace Neurospora
         }
 
         [Description("(nM/h)")]
+        [Category("Параметры")]
         public double Vd
         {
             get;
@@ -80,6 +77,7 @@ namespace Neurospora
         }
 
         [Description("(nM)")]
+        [Category("Параметры")]
         public double Ki
         {
             get;
@@ -87,6 +85,7 @@ namespace Neurospora
         }
 
         [Description("(nM)")]
+        [Category("Параметры")]
         public double Km
         {
             get;
@@ -94,6 +93,7 @@ namespace Neurospora
         }
 
         [Description("(nM)")]
+        [Category("Параметры")]
         public double Kd
         {
             get;
@@ -101,6 +101,7 @@ namespace Neurospora
         }
 
         [Description("(1/h)")]
+        [Category("Параметры")]
         public double k1
         {
             get;
@@ -108,6 +109,7 @@ namespace Neurospora
         }
 
         [Description("(1/h)")]
+        [Category("Параметры")]
         public double k2
         {
             get;
@@ -115,6 +117,7 @@ namespace Neurospora
         }
 
         [Description("(1/h)")]
+        [Category("Параметры")]
         public double ks
         {
             get;

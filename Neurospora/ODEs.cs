@@ -3,12 +3,17 @@ using System.ComponentModel;
 
 namespace Neurospora
 {
-    class ODEs : Solvable
+    public class ODEs : Solvable
     {
+        private double[] Vs; // массив для значений параметра
         private double[] M, Fc, Fn; // массивы для решений уравнений
         private double[] t; // массив для разбиения отрезка
         private double ht; // шаг по t
-
+  
+        // служебные переменные
+        private int switchPace;
+        private bool darkVs;
+        private bool isVsVariable;
         private const double VALUE_THRESHOLD = 1E4;
 
         public ODEs() : base()
@@ -16,10 +21,16 @@ namespace Neurospora
             M0 = 1;
             Fc0 = 0.5;
             Fn0 = 0.5;
+
+            Vs = new double[] { 1.6, 2.0 }; // первый для постоянного/ночного режима
+                                            // второй для дневного режима
+            darkVs = false;
+            isVsVariable = false;
         }
 
         // свойства
         [Description("Начальное значение M(0)")]
+        [Category("Начальные условия")]
         public double M0
         {
             get;
@@ -27,6 +38,7 @@ namespace Neurospora
         }
 
         [Description("Начальное значение Fc(0)")]
+        [Category("Начальные условия")]
         public double Fc0
         {
             get;
@@ -34,15 +46,63 @@ namespace Neurospora
         }
 
         [Description("Начальное значение Fn(0)")]
+        [Category("Начальные условия")]
         public double Fn0
         {
             get;
             set;
         }
 
+        // меняем постоянность/переменность Vs
+        public void changeVsVariability()
+        {
+            isVsVariable = !isVsVariable;
+        }
+
+        public bool isVsVar() 
+        { 
+            return isVsVariable; 
+        }
+
+        public void setVs(int j, double val)
+        {
+            Vs[j] = val;
+        }
+        public double getVs(int j)
+        {
+            // если Vs постоянный
+            if (!isVsVariable)
+                return Vs[0];
+
+            // каждые 12 часов переключаем режим
+            if (j % switchPace == 0)
+            {
+                if (j / switchPace % 2 == 0)
+                    darkVs = false;
+                else
+                    darkVs = true;
+            }
+
+            // если Vs переменный и режим ночной
+            if (darkVs)
+                return Vs[0];
+            // если Vs переменный и режим дневной
+            else
+                return Vs[1];
+        }
+        public double getVs(bool darkVs)
+        {
+            if (darkVs)
+                return Vs[0];
+            else
+                return Vs[1];
+        }
+
         public override void load()
         {
             ht = T / N;
+
+            switchPace = (int)(12 / ht + 1);
 
             // выделение памяти под массивы
             M = new double[N];
@@ -77,7 +137,7 @@ namespace Neurospora
                 if (fntemp > VALUE_THRESHOLD)
                     return -1;
 
-                double m_j = fm(M[j], Fn[j], ki_n);
+                double m_j = fm(M[j], Fn[j], ki_n, j);
                 double mtemp = M[j] + ht * m_j;
                 if (mtemp > VALUE_THRESHOLD)
                     return -1;
@@ -87,7 +147,7 @@ namespace Neurospora
                 if (fctemp > VALUE_THRESHOLD)
                     return -1;
 
-                M[j + 1] = M[j] + ht * 0.5 * (m_j + fm(mtemp, fntemp, ki_n));
+                M[j + 1] = M[j] + ht * 0.5 * (m_j + fm(mtemp, fntemp, ki_n, j));
                 Fc[j + 1] = Fc[j] + ht * 0.5 * (fc_j + fc(mtemp, fctemp, fntemp));
                 Fn[j + 1] = Fn[j] + ht * 0.5 * (fn_j + fn(fctemp, fntemp));
                 //                                                                  //
@@ -96,7 +156,7 @@ namespace Neurospora
 
                 /////////////////////////
                 //// Euler's 1st order //
-                //double mtemp1 = fm(M[j], Fn[j], ki_n);
+                //double mtemp1 = fm(M[j], Fn[j], ki_n, j);
                 //double mtemp = M[j] + ht * mtemp1;
                 //if (mtemp > VALUE_THRESHOLD)
                 //    return -1;
@@ -121,9 +181,9 @@ namespace Neurospora
         }
 
         // вспомогательные функции
-        private double fm(double m, double fn, double ki_n)
+        private double fm(double m, double fn, double ki_n, int j)
         {
-            return Vs * ki_n / (ki_n + Math.Pow(fn, n)) - Vm * m / (Km + m);
+            return getVs(j) * ki_n / (ki_n + Math.Pow(fn, n)) - Vm * m / (Km + m);
         }
         private double fc(double m, double fc, double fn)
         {
