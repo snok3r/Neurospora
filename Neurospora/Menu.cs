@@ -25,8 +25,8 @@ namespace Neurospora
 
             propertyGrid.SelectedObject = odes[0];
 
-            textBoxVsDarkOrNon.Text = odes[0].getVsMenu(0).ToString();
-            textBoxVsLight.Text = odes[0].getVsMenu(1).ToString();
+            textBoxVsDarkOrNon.Text = odes[0].getVs(true).ToString();
+            textBoxVsLight.Text = odes[0].getVs(false).ToString();
         }
 
         private void propertyGrid_SelectedGridItemChanged(object sender, SelectedGridItemChangedEventArgs e)
@@ -64,7 +64,7 @@ namespace Neurospora
         {
             disablePlotButton();
 
-            odes[0].changeVsVar();
+            odes[0].changeVsVariability();
 
             labelVsLight.Visible = !labelVsLight.Visible;
             textBoxVsLight.Visible = !textBoxVsLight.Visible;
@@ -85,11 +85,11 @@ namespace Neurospora
             try
             {
                 odes[0].setVs(0, Double.Parse(textBoxVsDarkOrNon.Text));
-                textBoxVsDarkOrNon.Text = odes[0].getVsMenu(0).ToString();
+                textBoxVsDarkOrNon.Text = odes[0].getVs(true).ToString();
             }
             catch (Exception)
             {
-                textBoxVsDarkOrNon.Text = odes[0].getVsMenu(0).ToString();
+                textBoxVsDarkOrNon.Text = odes[0].getVs(true).ToString();
             }
         }
 
@@ -103,18 +103,16 @@ namespace Neurospora
             try
             {
                 odes[0].setVs(1, Double.Parse(textBoxVsLight.Text));
-                textBoxVsLight.Text = odes[0].getVsMenu(1).ToString();
+                textBoxVsLight.Text = odes[0].getVs(false).ToString();
             }
             catch (Exception)
             {
-                textBoxVsLight.Text = odes[0].getVsMenu(1).ToString();
+                textBoxVsLight.Text = odes[0].getVs(false).ToString();
             }
         }
 
         private void buttonSolve_Click(object sender, EventArgs e)
         {
-            odes[0].getVs(-1);
-
             for (int i = 0; i < NUM_OF_EQ; i++)
                 odes[i].load();
 

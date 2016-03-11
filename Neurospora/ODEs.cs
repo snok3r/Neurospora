@@ -5,17 +5,15 @@ namespace Neurospora
 {
     public class ODEs : Solvable
     {
+        private double[] Vs; // массив для значений параметра
         private double[] M, Fc, Fn; // массивы для решений уравнений
         private double[] t; // массив для разбиения отрезка
         private double ht; // шаг по t
-
-        private double[] Vs; // массив для значений параметра
-        
+  
         // служебные переменные
         private int switchPace;
-        private bool switchVs;
+        private bool darkVs;
         private bool isVsVariable;
-
         private const double VALUE_THRESHOLD = 1E4;
 
         public ODEs() : base()
@@ -26,7 +24,7 @@ namespace Neurospora
 
             Vs = new double[] { 1.6, 2.0 }; // первый для постоянного/ночного режима
                                             // второй для дневного режима
-            switchVs = false;
+            darkVs = false;
             isVsVariable = false;
         }
 
@@ -56,9 +54,14 @@ namespace Neurospora
         }
 
         // меняем постоянность/переменность Vs
-        public void changeVsVar()
+        public void changeVsVariability()
         {
             isVsVariable = !isVsVariable;
+        }
+
+        public bool isVsVar() 
+        { 
+            return isVsVariable; 
         }
 
         public void setVs(int j, double val)
@@ -67,39 +70,33 @@ namespace Neurospora
         }
         public double getVs(int j)
         {
-            // для сброса переключателя в дневной режим
-            if (j == -1)
-            {
-                switchVs = false;
-                return -1;
-            }
-
-            // каждые 12 часов переключаем режим
-            if (isVsVariable && j % switchPace == 0 && j != 0)
-                switchVs = !switchVs;
-
             // если Vs постоянный
             if (!isVsVariable)
                 return Vs[0];
+
+            // каждые 12 часов переключаем режим
+            if (j % switchPace == 0)
+            {
+                if (j / switchPace % 2 == 0)
+                    darkVs = false;
+                else
+                    darkVs = true;
+            }
+
             // если Vs переменный и режим ночной
-            else if (switchVs && isVsVariable)
+            if (darkVs)
                 return Vs[0];
             // если Vs переменный и режим дневной
             else
                 return Vs[1];
-         }
-        public String getVsString()
+        }
+        public double getVs(bool darkVs)
         {
-            if (isVsVariable)
-                return "Vs = " + Vs[0] + " / " + Vs[1] + ";  ";
+            if (darkVs)
+                return Vs[0];
             else
-                return "Vs = " + Vs[0].ToString() + ";  ";
+                return Vs[1];
         }
-        public double getVsMenu(int j)
-        {
-            return Vs[j];
-        }
-        
 
         public override void load()
         {
@@ -149,9 +146,6 @@ namespace Neurospora
                 double fctemp = Fc[j] + ht * fc_j;
                 if (fctemp > VALUE_THRESHOLD)
                     return -1;
-
-                if (isVsVariable && j % switchPace == 0 && j != 0)
-                    switchVs = !switchVs;
 
                 M[j + 1] = M[j] + ht * 0.5 * (m_j + fm(mtemp, fntemp, ki_n, j));
                 Fc[j + 1] = Fc[j] + ht * 0.5 * (fc_j + fc(mtemp, fctemp, fntemp));

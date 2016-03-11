@@ -18,11 +18,8 @@ namespace Neurospora
             setPlot(odes[0].T);
 
             for (int i = 0; i < NUM_OF_EQ; i++)
-            {
-                odes[i].getVs(-1);
                 for (int j = 0; j < odes[i].N; j++)
                     plot(odes[i], j);
-            }
 
             makeTitle(odes[0]);
         }
@@ -66,7 +63,10 @@ namespace Neurospora
             sb.Append("k1 = " + ode.k1 + ";  ");
             sb.Append("k2 = " + ode.k2 + ";  ");
             sb.Append("ks = " + ode.ks + ";  ");
-            sb.Append(ode.getVsString());
+            if (ode.isVsVar())
+                sb.Append("Vs = " + ode.getVs(true) + " / " + ode.getVs(false) + ";  ");
+            else
+                sb.Append("Vs = " + ode.getVs(true) + ";  ");
             sb.Append("Vm = " + ode.Vm + ";  ");
             sb.Append("Vd = " + ode.Vd + ";  ");
             sb.Append("n = " + ode.n);
