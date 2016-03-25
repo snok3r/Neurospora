@@ -29,10 +29,13 @@ namespace Neurospora
             textBoxVsLight.Text = odes[0].getVs(false).ToString();
         }
 
-        private void propertyGrid_SelectedGridItemChanged(object sender, SelectedGridItemChangedEventArgs e)
+        private void propertyGrid_PropertyValueChanged(object s, PropertyValueChangedEventArgs e)
         {
             // при изменении параметров уравнений,
             // запрещаем рисовать решение
+            if (e.OldValue == e.ChangedItem.Value) // параметры не изменились
+                return;
+
             disablePlotButton();
         }
 
@@ -120,10 +123,8 @@ namespace Neurospora
                 odes[i].initials();
 
             for (int i = 0; i < NUM_OF_EQ; i++)
-            {
                 if (odes[i].solve() != 0)
                     labelError.Visible = true;
-            }
 
             enablePlotButton();
         }
@@ -132,7 +133,7 @@ namespace Neurospora
         {
             if (!plot.Created)
                 openPlot();
-            plot.buttonPlot_Click(odes, NUM_OF_EQ);
+            plot.buttonPlot_Click(odes);
         }
 
         private void openPlot()

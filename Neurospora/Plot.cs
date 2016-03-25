@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Text;
+using System.IO;
 using System.Windows.Forms;
 
 namespace Neurospora
@@ -12,27 +13,38 @@ namespace Neurospora
             InitializeComponent();
         }
 
-        public void buttonPlot_Click(ODEs[] odes, int NUM_OF_EQ)
+        public void buttonPlot_Click(ODEs[] odes)
         {
             clearPlot();
             setPlot(odes[0].T);
 
-            for (int i = 0; i < NUM_OF_EQ; i++)
-                for (int j = 0; j < odes[i].N; j++)
-                    plot(odes[i], j);
+            StreamReader srT = new StreamReader("./tmp/T.ira");
+            StreamReader srM = new StreamReader("./tmp/M.ira");
+            StreamReader srFc = new StreamReader("./tmp/Fc.ira");
+            StreamReader srFn = new StreamReader("./tmp/Fn.ira");
+
+            string m;
+            int j = 0;
+            while ((m = srM.ReadLine()) != null)
+            {
+                plot(double.Parse(srT.ReadLine()), double.Parse(m), double.Parse(srFc.ReadLine()), double.Parse(srFn.ReadLine()), odes[0].getVs(j));
+                j++;
+            }
+
+            srT.Close();
+            srM.Close(); 
+            srFc.Close(); 
+            srFn.Close();
 
             makeTitle(odes[0]);
         }
 
-        private void plot(ODEs ode, int j)
+        private void plot(double t, double m, double fc, double fn, double vs)
         {
-            double t = ode.getT(j);
-            double fn = ode.getFn(j);
-
-            chart.Series[0].Points.AddXY(t, ode.getM(j));
-            chart.Series[1].Points.AddXY(t, ode.getFc(j) + fn);
+            chart.Series[0].Points.AddXY(t, m);
+            chart.Series[1].Points.AddXY(t, fc + fn);
             chart.Series[2].Points.AddXY(t, fn);
-            chart.Series[3].Points.AddXY(t, ode.getVs(j));
+            chart.Series[3].Points.AddXY(t, vs);
         }
 
         private void clearPlot()

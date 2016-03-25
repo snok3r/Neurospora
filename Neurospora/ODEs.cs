@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.ComponentModel;
 
 namespace Neurospora
@@ -7,8 +8,6 @@ namespace Neurospora
     {
         private double[] Vs; // массив для значений параметра
         private double[] M, Fc, Fn; // массивы для решений уравнений
-        private double[] t; // массив для разбиения отрезка
-        private double ht; // шаг по t
   
         // служебные переменные
         private int switchPace;
@@ -22,6 +21,10 @@ namespace Neurospora
             Fc0 = 0.5;
             Fn0 = 0.5;
 
+            // выделение памяти под массивы
+            M = new double[2];
+            Fc = new double[2];
+            Fn = new double[2];
             Vs = new double[] { 1.6, 2.0 }; // первый для постоянного/ночного режима
                                             // второй для дневного режима
             darkVs = false;
@@ -100,19 +103,14 @@ namespace Neurospora
 
         public override void load()
         {
-            ht = T / N;
-
             switchPace = (int)(12 / ht + 1);
 
-            // выделение памяти под массивы
-            M = new double[N];
-            Fc = new double[N];
-            Fn = new double[N];
-            t = new double[N];
-
             // разбиение отрезка
-            for (int j = 0; j < N; j++)
-                t[j] = j * ht;
+            Directory.CreateDirectory("tmp");
+            StreamWriter swT = new StreamWriter("./tmp/T.ira", false);
+            for (int j = 0; j <= (int)(T / ht); j++) 
+                swT.WriteLine(j * ht);
+            swT.Close();
         }
 
         public override void initials()
@@ -126,64 +124,52 @@ namespace Neurospora
         // в противном случае, возращает 0
         public override int solve()
         {
+            StreamWriter swM = new StreamWriter("./tmp/M.ira", false);
+            StreamWriter swFc = new StreamWriter("./tmp/Fc.ira", false);
+            StreamWriter swFn = new StreamWriter("./tmp/Fn.ira", false);
+            swM.WriteLine(M0); 
+            swFc.WriteLine(Fc0); 
+            swFn.WriteLine(Fn0);
+
             double ki_n = Math.Pow(Ki, n);
 
-            for (int j = 0; j < N - 1; j++)
+            for (int j = 0; j < (int)(T / ht); j++)
             {
-                /////////////////////////////////////////////////////////////////////
-                // Euler's 2nd order                                               //
-                double fn_j = fn(Fc[j], Fn[j]);
-                double fntemp = Fn[j] + ht * fn_j;
+                double fn_j = fn(Fc[j % 2], Fn[j % 2]);
+                double fntemp = Fn[j % 2] + ht * fn_j;
                 if (fntemp > VALUE_THRESHOLD)
                     return -1;
 
-                double m_j = fm(M[j], Fn[j], ki_n, j);
-                double mtemp = M[j] + ht * m_j;
+                double m_j = fm(M[j % 2], Fn[j % 2], ki_n, getVs(j));
+                double mtemp = M[j % 2] + ht * m_j;
                 if (mtemp > VALUE_THRESHOLD)
                     return -1;
 
-                double fc_j = fc(M[j], Fc[j], Fn[j]);
-                double fctemp = Fc[j] + ht * fc_j;
+                double fc_j = fc(M[j % 2], Fc[j % 2], Fn[j % 2]);
+                double fctemp = Fc[j % 2] + ht * fc_j;
                 if (fctemp > VALUE_THRESHOLD)
                     return -1;
 
-                M[j + 1] = M[j] + ht * 0.5 * (m_j + fm(mtemp, fntemp, ki_n, j));
-                Fc[j + 1] = Fc[j] + ht * 0.5 * (fc_j + fc(mtemp, fctemp, fntemp));
-                Fn[j + 1] = Fn[j] + ht * 0.5 * (fn_j + fn(fctemp, fntemp));
-                //                                                                  //
-                /////////////////////////////////////////////////////////////////////
+                M[(j + 1) % 2] = M[j % 2] + ht * 0.5 * (m_j + fm(mtemp, fntemp, ki_n, getVs(j)));
+                Fc[(j + 1) % 2] = Fc[j % 2] + ht * 0.5 * (fc_j + fc(mtemp, fctemp, fntemp));
+                Fn[(j + 1) % 2] = Fn[j % 2] + ht * 0.5 * (fn_j + fn(fctemp, fntemp));
 
-
-                /////////////////////////
-                //// Euler's 1st order //
-                //double mtemp1 = fm(M[j], Fn[j], ki_n, j);
-                //double mtemp = M[j] + ht * mtemp1;
-                //if (mtemp > VALUE_THRESHOLD)
-                //    return -1;
-                //M[j + 1] = mtemp;
-
-                //double fctemp1 = fc(M[j + 1], Fc[j], Fn[j]);
-                //double fctemp = Fc[j] + ht * fctemp1;
-                //if (fctemp > VALUE_THRESHOLD)
-                //    return -1;
-                //Fc[j + 1] = fctemp;
-
-                //double fntemp1 = fn(Fc[j + 1], Fn[j]);
-                //double fntemp = Fn[j] + ht * fntemp1;
-                //if (fntemp > VALUE_THRESHOLD)
-                //    return -1;
-                //Fn[j + 1] = fntemp;
-                ////                    //
-                /////////////////////////
+                swM.WriteLine(M[(j + 1) % 2]);
+                swFc.WriteLine(Fc[(j + 1) % 2]);
+                swFn.WriteLine(Fn[(j + 1) % 2]);
             }
-            
+
+            swM.Close();
+            swFc.Close(); 
+            swFn.Close();
+
             return 0;
         }
 
         // вспомогательные функции
-        private double fm(double m, double fn, double ki_n, int j)
+        private double fm(double m, double fn, double ki_n, double vs)
         {
-            return getVs(j) * ki_n / (ki_n + Math.Pow(fn, n)) - Vm * m / (Km + m);
+            return vs * ki_n / (ki_n + Math.Pow(fn, n)) - Vm * m / (Km + m);
         }
         private double fc(double m, double fc, double fn)
         {
@@ -193,15 +179,5 @@ namespace Neurospora
         {
             return k1 * fc - k2 * fn;
         }
-
-        // геттеры для массивов
-        public double getT(int j)
-        { return t[j]; }
-        public double getM(int j)
-        { return M[j]; }
-        public double getFc(int j)
-        { return Fc[j]; }
-        public double getFn(int j)
-        { return Fn[j]; }
     }
 }

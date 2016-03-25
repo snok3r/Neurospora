@@ -11,7 +11,7 @@ namespace Neurospora
         // конструктор
         protected Solvable()
         {
-            N = 10000;
+            ht = 0.01;
             T = 72;
             
             n = 4;
@@ -29,18 +29,17 @@ namespace Neurospora
         }
 
         // переменные для свойств
-        private int varN;
+        private double varHt;
 
-        // свойства
-        [Description("Кол-во точек по t")]
+        [Description("Шаг в сетке по t")]
         [Category("Для решения")]
-        public int N
+        public double ht
         {
-            get { return varN; }
+            get { return varHt; }
             set
             {
-                if (value > 10)
-                    varN = value;
+                if (value > 0)
+                    varHt = value;
             }
         }
 
