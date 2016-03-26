@@ -13,30 +13,38 @@ namespace Neurospora
             InitializeComponent();
         }
 
-        public void buttonPlot_Click(ODEs[] odes)
+        public void buttonPlot_Click(ODEs ode)
         {
             clearPlot();
-            setPlot(odes[0].T);
+            setPlot(ode.T);
 
-            StreamReader srT = new StreamReader("./tmp/T.ira");
-            StreamReader srM = new StreamReader("./tmp/M.ira");
-            StreamReader srFc = new StreamReader("./tmp/Fc.ira");
-            StreamReader srFn = new StreamReader("./tmp/Fn.ira");
-
-            string m;
-            int j = 0;
-            while ((m = srM.ReadLine()) != null)
+            StreamReader srT = null, srM = null, srFc = null, srFn = null;
+            try
             {
-                plot(double.Parse(srT.ReadLine()), double.Parse(m), double.Parse(srFc.ReadLine()), double.Parse(srFn.ReadLine()), odes[0].getVs(j));
-                j++;
+                srT = new StreamReader(Program.tmpFolder + "/T.ira");
+                srM = new StreamReader(Program.tmpFolder + "/M.ira");
+                srFc = new StreamReader(Program.tmpFolder + "/Fc.ira");
+                srFn = new StreamReader(Program.tmpFolder + "/Fn.ira");
+
+                string m;
+                int j = 0;
+                while ((m = srM.ReadLine()) != null)
+                {
+                    plot(double.Parse(srT.ReadLine()), double.Parse(m), double.Parse(srFc.ReadLine()), double.Parse(srFn.ReadLine()), ode.getVs(j));
+                    j++;
+                }
+
+                makeTitle(ode);
             }
-
-            srT.Close();
-            srM.Close(); 
-            srFc.Close(); 
-            srFn.Close();
-
-            makeTitle(odes[0]);
+            catch (FileNotFoundException e) { throw e; }
+            catch (DirectoryNotFoundException e) { throw e; }
+            finally
+            {
+                if (srT !=null) srT.Close();
+                if (srM != null) srM.Close();
+                if (srFc != null) srFc.Close();
+                if (srFn != null) srFn.Close();
+            }
         }
 
         private void plot(double t, double m, double fc, double fn, double vs)

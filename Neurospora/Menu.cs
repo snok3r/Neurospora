@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Windows.Forms;
 
 namespace Neurospora
@@ -6,27 +7,36 @@ namespace Neurospora
     public partial class Menu : Form
     {
         Plot plot;
-        ODEs[] odes;
-        private const int NUM_OF_EQ = 1;
+        ODEs ode;
 
         public Menu()
         {
             InitializeComponent();
-
+            Directory.CreateDirectory(Program.tmpFolder);
             openPlot();
+        }
+
+        private void Menu_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            try
+            {
+                Directory.Delete(Program.tmpFolder, true);
+            }
+            catch (DirectoryNotFoundException) { }
+            finally 
+            {
+                Dispose(true);
+            }
         }
 
         private void Menu_Load(object sender, EventArgs e)
         {
-            odes = new ODEs[NUM_OF_EQ];
+            ode = new ODEs();
 
-            for (int i = 0; i < NUM_OF_EQ; i++)
-                odes[i] = new ODEs();
+            propertyGrid.SelectedObject = ode;
 
-            propertyGrid.SelectedObject = odes[0];
-
-            textBoxVsDarkOrNon.Text = odes[0].getVs(true).ToString();
-            textBoxVsLight.Text = odes[0].getVs(false).ToString();
+            textBoxVsDarkOrNon.Text = ode.getVs(true).ToString();
+            textBoxVsLight.Text = ode.getVs(false).ToString();
         }
 
         private void propertyGrid_PropertyValueChanged(object s, PropertyValueChangedEventArgs e)
@@ -41,25 +51,19 @@ namespace Neurospora
 
         private void disablePlotButton()
         {
-            // выключает кнопку "Нарисовать" и 
-            // включает кнопку "Решить"
             if (buttonPlot.Enabled)
             {
                 buttonPlot.Enabled = false;
                 buttonSolve.Enabled = true;
             }
-
-            labelError.Visible = false;
         }
 
         private void enablePlotButton()
         {
-            // если система решена успешно,
-            // то включаем кнопку "Нарисовать"
-            if (!labelError.Visible)
+            if (!buttonPlot.Enabled)
             {
-                buttonSolve.Enabled = false;
                 buttonPlot.Enabled = true;
+                buttonSolve.Enabled = false;
             }
         }
 
@@ -67,7 +71,7 @@ namespace Neurospora
         {
             disablePlotButton();
 
-            odes[0].changeVsVariability();
+            ode.changeVsVariability();
 
             labelVsLight.Visible = !labelVsLight.Visible;
             textBoxVsLight.Visible = !textBoxVsLight.Visible;
@@ -87,13 +91,10 @@ namespace Neurospora
         {
             try
             {
-                odes[0].setVs(0, Double.Parse(textBoxVsDarkOrNon.Text));
-                textBoxVsDarkOrNon.Text = odes[0].getVs(true).ToString();
+                ode.setVs(0, Double.Parse(textBoxVsDarkOrNon.Text));
             }
-            catch (Exception)
-            {
-                textBoxVsDarkOrNon.Text = odes[0].getVs(true).ToString();
-            }
+            catch (Exception) { }
+            textBoxVsDarkOrNon.Text = ode.getVs(true).ToString();
         }
 
         private void textBoxVsLight_TextChanged(object sender, EventArgs e)
@@ -105,35 +106,55 @@ namespace Neurospora
         {
             try
             {
-                odes[0].setVs(1, Double.Parse(textBoxVsLight.Text));
-                textBoxVsLight.Text = odes[0].getVs(false).ToString();
+                ode.setVs(1, Double.Parse(textBoxVsLight.Text));
             }
-            catch (Exception)
-            {
-                textBoxVsLight.Text = odes[0].getVs(false).ToString();
-            }
+            catch (Exception) { }
+            textBoxVsLight.Text = ode.getVs(false).ToString();
         }
 
         private void buttonSolve_Click(object sender, EventArgs e)
         {
-            for (int i = 0; i < NUM_OF_EQ; i++)
-                odes[i].load();
+            labelError.Visible = false;
+            labelErrFile.Visible = false;
 
-            for (int i = 0; i < NUM_OF_EQ; i++)
-                odes[i].initials();
-
-            for (int i = 0; i < NUM_OF_EQ; i++)
-                if (odes[i].solve() != 0)
-                    labelError.Visible = true;
-
-            enablePlotButton();
+            try
+            {
+                ode.load();
+                ode.initials();
+                ode.solve();
+                enablePlotButton();
+            }
+            catch (OverflowException)
+            {
+                labelError.Visible = true;
+            }
+            catch (DirectoryNotFoundException)
+            {
+                Directory.CreateDirectory(Program.tmpFolder);
+                labelErrFile.Visible = true;
+            }
         }
 
         private void buttonPlot_Click(object sender, EventArgs e)
         {
             if (!plot.Created)
                 openPlot();
-            plot.buttonPlot_Click(odes);
+
+            try
+            {
+                plot.buttonPlot_Click(ode);
+            }
+            catch (FileNotFoundException) 
+            {
+                disablePlotButton();
+                labelErrFile.Visible = true;
+            }
+            catch (DirectoryNotFoundException) 
+            {
+                Directory.CreateDirectory(Program.tmpFolder);
+                disablePlotButton();
+                labelErrFile.Visible = true;
+            }
         }
 
         private void openPlot()

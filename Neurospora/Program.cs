@@ -1,13 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Neurospora
 {
     static class Program
     {
+        public const string tmpFolder = "~tmp";
         /// <summary>
         /// Главная точка входа для приложения.
         /// </summary>

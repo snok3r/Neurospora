@@ -38,6 +38,7 @@
             this.labelVsLight = new System.Windows.Forms.Label();
             this.textBoxVsDarkOrNon = new System.Windows.Forms.TextBox();
             this.textBoxVsLight = new System.Windows.Forms.TextBox();
+            this.labelErrFile = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // propertyGrid
@@ -140,12 +141,26 @@
             this.textBoxVsLight.TextChanged += new System.EventHandler(this.textBoxVsLight_TextChanged);
             this.textBoxVsLight.Validated += new System.EventHandler(this.textBoxVsLight_Validated);
             // 
+            // labelErrFile
+            // 
+            this.labelErrFile.AutoSize = true;
+            this.labelErrFile.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.labelErrFile.ForeColor = System.Drawing.Color.Maroon;
+            this.labelErrFile.Location = new System.Drawing.Point(32, 520);
+            this.labelErrFile.Name = "labelErrFile";
+            this.labelErrFile.Size = new System.Drawing.Size(127, 18);
+            this.labelErrFile.TabIndex = 11;
+            this.labelErrFile.Text = "File Load Failed";
+            this.labelErrFile.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.labelErrFile.Visible = false;
+            // 
             // Menu
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.ClientSize = new System.Drawing.Size(184, 561);
+            this.Controls.Add(this.labelErrFile);
             this.Controls.Add(this.textBoxVsLight);
             this.Controls.Add(this.textBoxVsDarkOrNon);
             this.Controls.Add(this.labelVsLight);
@@ -164,6 +179,7 @@
             this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "Menu";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Menu_FormClosing);
             this.Load += new System.EventHandler(this.Menu_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -182,6 +198,7 @@
         private System.Windows.Forms.Label labelVsLight;
         private System.Windows.Forms.TextBox textBoxVsDarkOrNon;
         private System.Windows.Forms.TextBox textBoxVsLight;
+        private System.Windows.Forms.Label labelErrFile;
     }
 }
 

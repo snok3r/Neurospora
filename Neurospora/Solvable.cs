@@ -6,7 +6,7 @@ namespace Neurospora
     {
         public abstract void load();
         public abstract void initials();
-        public abstract int solve();
+        public abstract void solve();
 
         // конструктор
         protected Solvable()

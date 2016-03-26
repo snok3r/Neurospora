@@ -71,6 +71,7 @@ namespace Neurospora
         {
             Vs[j] = val;
         }
+
         public double getVs(int j)
         {
             // если Vs постоянный
@@ -86,18 +87,14 @@ namespace Neurospora
                     darkVs = true;
             }
 
-            // если Vs переменный и режим ночной
-            if (darkVs)
-                return Vs[0];
-            // если Vs переменный и режим дневной
-            else
-                return Vs[1];
+            return getVs(darkVs);
         }
+
         public double getVs(bool darkVs)
         {
-            if (darkVs)
+            if (darkVs) // если режим ночной
                 return Vs[0];
-            else
+            else // если режим дневной
                 return Vs[1];
         }
 
@@ -106,11 +103,15 @@ namespace Neurospora
             switchPace = (int)(12 / ht + 1);
 
             // разбиение отрезка
-            Directory.CreateDirectory("tmp");
-            StreamWriter swT = new StreamWriter("./tmp/T.ira", false);
-            for (int j = 0; j <= (int)(T / ht); j++) 
-                swT.WriteLine(j * ht);
-            swT.Close();
+            try
+            {
+                using (StreamWriter swT = new StreamWriter(Program.tmpFolder + "/T.ira", false))
+                {
+                    for (int j = 0; j <= (int)(T / ht); j++)
+                        swT.WriteLine(j * ht);
+                }
+            }
+            catch (DirectoryNotFoundException e) { throw e; }
         }
 
         public override void initials()
@@ -120,50 +121,55 @@ namespace Neurospora
             Fn[0] = Fn0;
         }
 
-        // возращает -1, если решение расходится,
-        // в противном случае, возращает 0
-        public override int solve()
+        // выкидывает OverflowException, если решение расходится
+        public override void solve()
         {
-            StreamWriter swM = new StreamWriter("./tmp/M.ira", false);
-            StreamWriter swFc = new StreamWriter("./tmp/Fc.ira", false);
-            StreamWriter swFn = new StreamWriter("./tmp/Fn.ira", false);
-            swM.WriteLine(M0); 
-            swFc.WriteLine(Fc0); 
-            swFn.WriteLine(Fn0);
-
-            double ki_n = Math.Pow(Ki, n);
-
-            for (int j = 0; j < (int)(T / ht); j++)
+            StreamWriter swM = null, swFc = null, swFn = null;
+            try
             {
-                double fn_j = fn(Fc[j % 2], Fn[j % 2]);
-                double fntemp = Fn[j % 2] + ht * fn_j;
-                if (fntemp > VALUE_THRESHOLD)
-                    return -1;
+                swM = new StreamWriter(Program.tmpFolder + "/M.ira", false);
+                swFc = new StreamWriter(Program.tmpFolder + "/Fc.ira", false);
+                swFn = new StreamWriter(Program.tmpFolder + "/Fn.ira", false);
+                swM.WriteLine(M0);
+                swFc.WriteLine(Fc0);
+                swFn.WriteLine(Fn0);
 
-                double m_j = fm(M[j % 2], Fn[j % 2], ki_n, getVs(j));
-                double mtemp = M[j % 2] + ht * m_j;
-                if (mtemp > VALUE_THRESHOLD)
-                    return -1;
+                double ki_n = Math.Pow(Ki, n);
 
-                double fc_j = fc(M[j % 2], Fc[j % 2], Fn[j % 2]);
-                double fctemp = Fc[j % 2] + ht * fc_j;
-                if (fctemp > VALUE_THRESHOLD)
-                    return -1;
+                for (int j = 0; j < (int)(T / ht); j++)
+                {
+                    double fn_j = fn(Fc[j % 2], Fn[j % 2]);
+                    double fntemp = Fn[j % 2] + ht * fn_j;
+                    if (fntemp > VALUE_THRESHOLD)
+                        throw new OverflowException("Fn is too big");
 
-                M[(j + 1) % 2] = M[j % 2] + ht * 0.5 * (m_j + fm(mtemp, fntemp, ki_n, getVs(j)));
-                Fc[(j + 1) % 2] = Fc[j % 2] + ht * 0.5 * (fc_j + fc(mtemp, fctemp, fntemp));
-                Fn[(j + 1) % 2] = Fn[j % 2] + ht * 0.5 * (fn_j + fn(fctemp, fntemp));
+                    double m_j = fm(M[j % 2], Fn[j % 2], ki_n, getVs(j));
+                    double mtemp = M[j % 2] + ht * m_j;
+                    if (mtemp > VALUE_THRESHOLD)
+                        throw new OverflowException("M is too big");
 
-                swM.WriteLine(M[(j + 1) % 2]);
-                swFc.WriteLine(Fc[(j + 1) % 2]);
-                swFn.WriteLine(Fn[(j + 1) % 2]);
+                    double fc_j = fc(M[j % 2], Fc[j % 2], Fn[j % 2]);
+                    double fctemp = Fc[j % 2] + ht * fc_j;
+                    if (fctemp > VALUE_THRESHOLD)
+                        throw new OverflowException("Fc is too big");
+
+                    M[(j + 1) % 2] = M[j % 2] + ht * 0.5 * (m_j + fm(mtemp, fntemp, ki_n, getVs(j)));
+                    Fc[(j + 1) % 2] = Fc[j % 2] + ht * 0.5 * (fc_j + fc(mtemp, fctemp, fntemp));
+                    Fn[(j + 1) % 2] = Fn[j % 2] + ht * 0.5 * (fn_j + fn(fctemp, fntemp));
+
+                    swM.WriteLine(M[(j + 1) % 2]);
+                    swFc.WriteLine(Fc[(j + 1) % 2]);
+                    swFn.WriteLine(Fn[(j + 1) % 2]);
+                }
             }
-
-            swM.Close();
-            swFc.Close(); 
-            swFn.Close();
-
-            return 0;
+            catch (OverflowException e) { throw e; }
+            catch (DirectoryNotFoundException e) { throw e; }
+            finally
+            {
+                if (swM != null) swM.Close();
+                if (swFc != null) swFc.Close();
+                if (swFn != null) swFn.Close();
+            }
         }
 
         // вспомогательные функции
