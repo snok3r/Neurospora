@@ -12,21 +12,7 @@ namespace Neurospora
         public Menu()
         {
             InitializeComponent();
-            Directory.CreateDirectory(Program.tmpFolder);
             openPlot();
-        }
-
-        private void Menu_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            try
-            {
-                Directory.Delete(Program.tmpFolder, true);
-            }
-            catch (DirectoryNotFoundException) { }
-            finally 
-            {
-                Dispose(true);
-            }
         }
 
         private void Menu_Load(object sender, EventArgs e)
