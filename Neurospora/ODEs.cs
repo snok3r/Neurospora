@@ -98,20 +98,17 @@ namespace Neurospora
                 return Vs[1];
         }
 
+        /// <exception cref="System.DirectoryNotFoundException">если что-то не так с файлами</exception>
         public override void load()
         {
             switchPace = (int)(12 / ht + 1);
 
             // разбиение отрезка
-            try
+            using (StreamWriter swT = new StreamWriter(Program.tmpFolder + "/T.ira", false))
             {
-                using (StreamWriter swT = new StreamWriter(Program.tmpFolder + "/T.ira", false))
-                {
-                    for (int j = 0; j <= (int)(T / ht); j++)
-                        swT.WriteLine(j * ht);
-                }
+                for (int j = 0; j <= (int)(T / ht); j++)
+                    swT.WriteLine(j * ht);
             }
-            catch (DirectoryNotFoundException e) { throw e; }
         }
 
         public override void initials()
@@ -121,15 +118,15 @@ namespace Neurospora
             Fn[0] = Fn0;
         }
 
-        // выкидывает OverflowException, если решение расходится
+        /// <exception cref="System.OverflowException">если решение расходится</exception>
+        /// <exception cref="System.DirectoryNotFoundException">если что-то не так с файлами</exception>
         public override void solve()
         {
-            StreamWriter swM = null, swFc = null, swFn = null;
-            try
+            using (StreamWriter
+                    swM = new StreamWriter(Program.tmpFolder + "/M.ira", false),
+                    swFc = new StreamWriter(Program.tmpFolder + "/Fc.ira", false),
+                    swFn = new StreamWriter(Program.tmpFolder + "/Fn.ira", false))
             {
-                swM = new StreamWriter(Program.tmpFolder + "/M.ira", false);
-                swFc = new StreamWriter(Program.tmpFolder + "/Fc.ira", false);
-                swFn = new StreamWriter(Program.tmpFolder + "/Fn.ira", false);
                 swM.WriteLine(M0);
                 swFc.WriteLine(Fc0);
                 swFn.WriteLine(Fn0);
@@ -161,15 +158,7 @@ namespace Neurospora
                     swFc.WriteLine(Fc[(j + 1) % 2]);
                     swFn.WriteLine(Fn[(j + 1) % 2]);
                 }
-            }
-            catch (OverflowException e) { throw e; }
-            catch (DirectoryNotFoundException e) { throw e; }
-            finally
-            {
-                if (swM != null) swM.Close();
-                if (swFc != null) swFc.Close();
-                if (swFn != null) swFn.Close();
-            }
+            } 
         }
 
         // вспомогательные функции

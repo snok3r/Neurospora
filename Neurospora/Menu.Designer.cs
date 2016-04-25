@@ -29,8 +29,7 @@
         private void InitializeComponent()
         {
             this.propertyGrid = new System.Windows.Forms.PropertyGrid();
-            this.buttonSolve = new System.Windows.Forms.Button();
-            this.buttonPlot = new System.Windows.Forms.Button();
+            this.buttonSolveAndPlot = new System.Windows.Forms.Button();
             this.labelError = new System.Windows.Forms.Label();
             this.buttonAbout = new System.Windows.Forms.Button();
             this.checkBoxVs = new System.Windows.Forms.CheckBox();
@@ -47,34 +46,24 @@
             this.propertyGrid.Name = "propertyGrid";
             this.propertyGrid.Size = new System.Drawing.Size(167, 363);
             this.propertyGrid.TabIndex = 1;
-            this.propertyGrid.PropertyValueChanged += new System.Windows.Forms.PropertyValueChangedEventHandler(this.propertyGrid_PropertyValueChanged);
             // 
-            // buttonSolve
+            // buttonSolveAndPlot
             // 
-            this.buttonSolve.Location = new System.Drawing.Point(12, 467);
-            this.buttonSolve.Name = "buttonSolve";
-            this.buttonSolve.Size = new System.Drawing.Size(163, 38);
-            this.buttonSolve.TabIndex = 2;
-            this.buttonSolve.Text = "Решить систему";
-            this.buttonSolve.UseVisualStyleBackColor = true;
-            this.buttonSolve.Click += new System.EventHandler(this.buttonSolve_Click);
-            // 
-            // buttonPlot
-            // 
-            this.buttonPlot.Location = new System.Drawing.Point(12, 511);
-            this.buttonPlot.Name = "buttonPlot";
-            this.buttonPlot.Size = new System.Drawing.Size(163, 38);
-            this.buttonPlot.TabIndex = 3;
-            this.buttonPlot.Text = "Нарисовать график";
-            this.buttonPlot.UseVisualStyleBackColor = true;
-            this.buttonPlot.Click += new System.EventHandler(this.buttonPlot_Click);
+            this.buttonSolveAndPlot.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.buttonSolveAndPlot.Location = new System.Drawing.Point(12, 467);
+            this.buttonSolveAndPlot.Name = "buttonSolveAndPlot";
+            this.buttonSolveAndPlot.Size = new System.Drawing.Size(163, 64);
+            this.buttonSolveAndPlot.TabIndex = 2;
+            this.buttonSolveAndPlot.Text = "Нарисовать решение";
+            this.buttonSolveAndPlot.UseVisualStyleBackColor = true;
+            this.buttonSolveAndPlot.Click += new System.EventHandler(this.buttonSolveAndPlot_Click);
             // 
             // labelError
             // 
             this.labelError.AutoSize = true;
             this.labelError.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.labelError.ForeColor = System.Drawing.Color.Maroon;
-            this.labelError.Location = new System.Drawing.Point(12, 520);
+            this.labelError.Location = new System.Drawing.Point(12, 534);
             this.labelError.Name = "labelError";
             this.labelError.Size = new System.Drawing.Size(169, 18);
             this.labelError.TabIndex = 4;
@@ -128,7 +117,6 @@
             this.textBoxVsDarkOrNon.Name = "textBoxVsDarkOrNon";
             this.textBoxVsDarkOrNon.Size = new System.Drawing.Size(55, 20);
             this.textBoxVsDarkOrNon.TabIndex = 9;
-            this.textBoxVsDarkOrNon.TextChanged += new System.EventHandler(this.textBoxVsDarkOrNon_TextChanged);
             this.textBoxVsDarkOrNon.Validated += new System.EventHandler(this.textBoxVsDarkOrNon_Validated);
             // 
             // textBoxVsLight
@@ -138,7 +126,6 @@
             this.textBoxVsLight.Size = new System.Drawing.Size(61, 20);
             this.textBoxVsLight.TabIndex = 10;
             this.textBoxVsLight.Visible = false;
-            this.textBoxVsLight.TextChanged += new System.EventHandler(this.textBoxVsLight_TextChanged);
             this.textBoxVsLight.Validated += new System.EventHandler(this.textBoxVsLight_Validated);
             // 
             // labelErrFile
@@ -146,7 +133,7 @@
             this.labelErrFile.AutoSize = true;
             this.labelErrFile.Font = new System.Drawing.Font("Microsoft Sans Serif", 11F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.labelErrFile.ForeColor = System.Drawing.Color.Maroon;
-            this.labelErrFile.Location = new System.Drawing.Point(32, 520);
+            this.labelErrFile.Location = new System.Drawing.Point(32, 534);
             this.labelErrFile.Name = "labelErrFile";
             this.labelErrFile.Size = new System.Drawing.Size(127, 18);
             this.labelErrFile.TabIndex = 11;
@@ -168,8 +155,7 @@
             this.Controls.Add(this.checkBoxVs);
             this.Controls.Add(this.buttonAbout);
             this.Controls.Add(this.labelError);
-            this.Controls.Add(this.buttonPlot);
-            this.Controls.Add(this.buttonSolve);
+            this.Controls.Add(this.buttonSolveAndPlot);
             this.Controls.Add(this.propertyGrid);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.HelpButton = true;
@@ -188,8 +174,7 @@
         #endregion
 
         private System.Windows.Forms.PropertyGrid propertyGrid;
-        private System.Windows.Forms.Button buttonSolve;
-        private System.Windows.Forms.Button buttonPlot;
+        private System.Windows.Forms.Button buttonSolveAndPlot;
         private System.Windows.Forms.Label labelError;
         private System.Windows.Forms.Button buttonAbout;
         private System.Windows.Forms.CheckBox checkBoxVs;

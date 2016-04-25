@@ -13,19 +13,19 @@ namespace Neurospora
             InitializeComponent();
         }
 
-        public void buttonPlot_Click(ODEs ode)
+        /// <exception cref="System.FileNotFoundException">если что-то не так с файлами</exception>
+        /// <exception cref="System.DirectoryNotFoundException">если что-то не так с файлами</exception>
+        public void plot(ODEs ode)
         {
             clearPlot();
             setPlot(ode.T);
 
-            StreamReader srT = null, srM = null, srFc = null, srFn = null;
-            try
+            using (StreamReader
+                srT = new StreamReader(Program.tmpFolder + "/T.ira"),
+                srM = new StreamReader(Program.tmpFolder + "/M.ira"),
+                srFc = new StreamReader(Program.tmpFolder + "/Fc.ira"),
+                srFn = new StreamReader(Program.tmpFolder + "/Fn.ira"))
             {
-                srT = new StreamReader(Program.tmpFolder + "/T.ira");
-                srM = new StreamReader(Program.tmpFolder + "/M.ira");
-                srFc = new StreamReader(Program.tmpFolder + "/Fc.ira");
-                srFn = new StreamReader(Program.tmpFolder + "/Fn.ira");
-
                 string m;
                 int j = 0;
                 while ((m = srM.ReadLine()) != null)
@@ -35,15 +35,6 @@ namespace Neurospora
                 }
 
                 makeTitle(ode);
-            }
-            catch (FileNotFoundException e) { throw e; }
-            catch (DirectoryNotFoundException e) { throw e; }
-            finally
-            {
-                if (srT !=null) srT.Close();
-                if (srM != null) srM.Close();
-                if (srFc != null) srFc.Close();
-                if (srFn != null) srFn.Close();
             }
         }
 
@@ -68,7 +59,7 @@ namespace Neurospora
             chart.ChartAreas[0].AxisX.Minimum = 0;
             chart.ChartAreas[0].AxisX.Maximum = T + 1;
 
-            if (T >= 12)
+            if (T > 12)
                 chart.ChartAreas[0].AxisX.Interval = 12;
             else
                 chart.ChartAreas[0].AxisX.Interval = 3;

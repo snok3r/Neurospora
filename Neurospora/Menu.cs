@@ -6,7 +6,7 @@ namespace Neurospora
 {
     public partial class Menu : Form
     {
-        Plot plot;
+        Plot plotView;
         ODEs ode;
 
         public Menu()
@@ -25,38 +25,8 @@ namespace Neurospora
             textBoxVsLight.Text = ode.getVs(false).ToString();
         }
 
-        private void propertyGrid_PropertyValueChanged(object s, PropertyValueChangedEventArgs e)
-        {
-            // при изменении параметров уравнений,
-            // запрещаем рисовать решение
-            if (e.OldValue == e.ChangedItem.Value) // параметры не изменились
-                return;
-
-            disablePlotButton();
-        }
-
-        private void disablePlotButton()
-        {
-            if (buttonPlot.Enabled)
-            {
-                buttonPlot.Enabled = false;
-                buttonSolve.Enabled = true;
-            }
-        }
-
-        private void enablePlotButton()
-        {
-            if (!buttonPlot.Enabled)
-            {
-                buttonPlot.Enabled = true;
-                buttonSolve.Enabled = false;
-            }
-        }
-
         private void checkBoxVs_CheckedChanged(object sender, EventArgs e)
         {
-            disablePlotButton();
-
             ode.changeVsVariability();
 
             labelVsLight.Visible = !labelVsLight.Visible;
@@ -66,11 +36,6 @@ namespace Neurospora
                 labelVsDarkOrNon.Text = "Vs dark";
             else
                 labelVsDarkOrNon.Text = "Vs";
-        }
-
-        private void textBoxVsDarkOrNon_TextChanged(object sender, EventArgs e)
-        {
-            disablePlotButton();
         }
 
         private void textBoxVsDarkOrNon_Validated(object sender, EventArgs e)
@@ -83,11 +48,6 @@ namespace Neurospora
             textBoxVsDarkOrNon.Text = ode.getVs(true).ToString();
         }
 
-        private void textBoxVsLight_TextChanged(object sender, EventArgs e)
-        {
-            disablePlotButton();
-        }
-
         private void textBoxVsLight_Validated(object sender, EventArgs e)
         {
             try
@@ -98,7 +58,13 @@ namespace Neurospora
             textBoxVsLight.Text = ode.getVs(false).ToString();
         }
 
-        private void buttonSolve_Click(object sender, EventArgs e)
+        private void buttonSolveAndPlot_Click(object sender, EventArgs e)
+        {
+            solve();
+            plot();
+        }
+
+        private void solve()
         {
             labelError.Visible = false;
             labelErrFile.Visible = false;
@@ -108,7 +74,6 @@ namespace Neurospora
                 ode.load();
                 ode.initials();
                 ode.solve();
-                enablePlotButton();
             }
             catch (OverflowException)
             {
@@ -121,33 +86,34 @@ namespace Neurospora
             }
         }
 
-        private void buttonPlot_Click(object sender, EventArgs e)
+        private void plot()
         {
-            if (!plot.Created)
-                openPlot();
+            if (!labelErrFile.Visible && !labelError.Visible)
+            {
+                if (!plotView.Created)
+                    openPlot();
 
-            try
-            {
-                plot.buttonPlot_Click(ode);
-            }
-            catch (FileNotFoundException) 
-            {
-                disablePlotButton();
-                labelErrFile.Visible = true;
-            }
-            catch (DirectoryNotFoundException) 
-            {
-                Directory.CreateDirectory(Program.tmpFolder);
-                disablePlotButton();
-                labelErrFile.Visible = true;
+                try
+                {
+                    plotView.plot(ode);
+                }
+                catch (FileNotFoundException)
+                {
+                    labelErrFile.Visible = true;
+                }
+                catch (DirectoryNotFoundException)
+                {
+                    Directory.CreateDirectory(Program.tmpFolder);
+                    labelErrFile.Visible = true;
+                }
             }
         }
 
         private void openPlot()
         {
-            plot = new Plot();
-            plot.Show();
-            plot.SetDesktopLocation(this.Location.X + this.Size.Width, this.Location.Y);
+            plotView = new Plot();
+            plotView.Show();
+            plotView.SetDesktopLocation(this.Location.X + this.Size.Width, this.Location.Y);
         }
 
         private void buttonAbout_Click(object sender, EventArgs e)
