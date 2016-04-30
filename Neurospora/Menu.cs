@@ -29,8 +29,8 @@ namespace Neurospora
         {
             ode.changeVsVariability();
 
-            labelVsLight.Visible = !labelVsLight.Visible;
-            textBoxVsLight.Visible = !textBoxVsLight.Visible;
+            labelVsLight.Enabled = !labelVsLight.Enabled;
+            textBoxVsLight.Enabled = !textBoxVsLight.Enabled;
 
             if (checkBoxVs.Checked)
                 labelVsDarkOrNon.Text = "Vs dark";
@@ -60,53 +60,71 @@ namespace Neurospora
 
         private void buttonSolveAndPlot_Click(object sender, EventArgs e)
         {
-            solve();
-            plot();
-        }
-
-        private void solve()
-        {
-            labelError.Visible = false;
-            labelErrFile.Visible = false;
-
             try
             {
-                ode.load();
-                ode.initials();
-                ode.solve();
+                solve();
+                plot();
             }
             catch (OverflowException)
             {
-                labelError.Visible = true;
+                MessageBox.Show(
+                    "Ошибка при вычислении (попробуйте уменьшить шаг ht)",
+                    "Computation error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
             catch (DirectoryNotFoundException)
             {
                 Directory.CreateDirectory(Program.tmpFolder);
-                labelErrFile.Visible = true;
+                if (sender is String)
+                {
+                    String message = (String)sender;
+                    if (message.Equals("directory not found"))
+                    {
+                        MessageBox.Show(
+                            "Ошибка при считывании с файла. Проверьте права доступа.",
+                            "Directory not found",
+                            MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                    }
+                }
+                else
+                    buttonSolveAndPlot_Click("directory not found", e);
+
+            }
+            catch (FileNotFoundException)
+            {
+                if (sender is String)
+                {
+                    String message = (String)sender;
+                    if (message.Equals("file not found"))
+                    {
+                        MessageBox.Show(
+                            "Ошибка при считывании с файла. Проверьте права доступа.",
+                            "File not found",
+                             MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                    }
+                }
+                else
+                    buttonSolveAndPlot_Click("file not found", e);
             }
         }
 
+        /// <exception cref="System.OverflowException">если решение расходится</exception>
+        /// <exception cref="System.DirectoryNotFoundException">если что-то не так с файлами</exception>
+        private void solve()
+        {
+            ode.load();
+            ode.initials();
+            ode.solve();
+        }
+
+        /// <exception cref="System.FileNotFoundException">если что-то не так с файлами</exception>
+        /// <exception cref="System.DirectoryNotFoundException">если что-то не так с файлами</exception>
         private void plot()
         {
-            if (!labelErrFile.Visible && !labelError.Visible)
-            {
-                if (!plotView.Created)
-                    openPlot();
+            if (!plotView.Created)
+                openPlot();
 
-                try
-                {
-                    plotView.plot(ode);
-                }
-                catch (FileNotFoundException)
-                {
-                    labelErrFile.Visible = true;
-                }
-                catch (DirectoryNotFoundException)
-                {
-                    Directory.CreateDirectory(Program.tmpFolder);
-                    labelErrFile.Visible = true;
-                }
-            }
+            plotView.plot(ode);
         }
 
         private void openPlot()

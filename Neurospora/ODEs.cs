@@ -8,14 +8,15 @@ namespace Neurospora
     {
         private double[] Vs; // массив для значений параметра
         private double[] M, Fc, Fn; // массивы для решений уравнений
-  
+
         // служебные переменные
         private int switchPace;
         private bool darkVs;
         private bool isVsVariable;
         private const double VALUE_THRESHOLD = 1E4;
 
-        public ODEs() : base()
+        public ODEs()
+            : base()
         {
             M0 = 1;
             Fc0 = 0.5;
@@ -26,7 +27,7 @@ namespace Neurospora
             Fc = new double[2];
             Fn = new double[2];
             Vs = new double[] { 1.6, 2.0 }; // первый для постоянного/ночного режима
-                                            // второй для дневного режима
+            // второй для дневного режима
             darkVs = false;
             isVsVariable = false;
         }
@@ -62,9 +63,9 @@ namespace Neurospora
             isVsVariable = !isVsVariable;
         }
 
-        public bool isVsVar() 
-        { 
-            return isVsVariable; 
+        public bool isVsVar()
+        {
+            return isVsVariable;
         }
 
         public void setVs(int j, double val)
@@ -158,7 +159,7 @@ namespace Neurospora
                     swFc.WriteLine(Fc[(j + 1) % 2]);
                     swFn.WriteLine(Fn[(j + 1) % 2]);
                 }
-            } 
+            }
         }
 
         // вспомогательные функции
